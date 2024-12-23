@@ -8,17 +8,13 @@ class UserService {
     }
 }
 
-// class UserController {
-//     constructor(private userService: UserService) {
-//         this.userService = userService
-//     }
-//     public auth() {
-//         return this.userService.login()
-//     }
-// }
 class UserController {
-    constructor(private userService: UserService) { }
-    public auth() {
+    //dependency 
+    public userService: UserService
+    constructor(userService: UserService) {
+        this.userService = userService
+    }
+    public auth(){
         return this.userService.login()
     }
 }

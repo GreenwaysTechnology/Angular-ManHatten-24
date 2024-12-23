@@ -736,6 +736,479 @@ let login = (userName: string, password: string, success: Function, failure: Fun
 login('admin', 'admin', status => console.log(status), err => console.log(err))
 login('xxx', 'yyy', status => console.log(status), err => console.log(err))
 
+...................................................................................
+			Object oriented Programming
+
+1.class syntax
+2.Object as type
+3.Encasulation
+4.Modualrity
+
+classes: instance variables
+class Employee {
+    //instance variables
+    id: number = 0
+    name: string = 'subramaian'
+    status: boolean = true
+    //constructor
+
+    //instance methods
+}
+
+//create instance
+
+//let is keyword
+//employee is just variable - reference variables which points object location
+//new is memory allocation operator
+//Employee() is constructor call
+let employee = new Employee()
+//access object properties
+console.log(`id ${employee.id}`)
+console.log(`Name ${employee.name}`)
+console.log(`status ${employee.status}`)
+
+//methods
+//methods
+class ProductService {
+
+    //methods
+    findAll(): string {
+        return "findAll"
+    }
+
+    save(name: string): string {
+        return "saved"
+    }
+}
+let productService = new ProductService()
+console.log(productService.findAll())
+console.log(productService.save("product"))
+....................................................................................
+			 state/instance variables initialization
+...................................................................................
+
+1.inside class directly
+2.inside constructors directly
+3.inside constructors via parameters
+4.outside class,after object creation
+
+
+1.inside class directly
+
+class Employee {
+    //instance variables
+    id: number = 0
+    name: string = 'subramaian'
+    status: boolean = true
+    //constructor
+
+    //instance methods
+}
+
+inside constructor 
+class Employee {
+    //declare variables
+    id: number 
+    name: string 
+    status: boolean
+    //constructor
+    constructor(){
+      //initalize inside constructor
+      this.id = 1
+      this.name='Subramanian'
+      this.status = true
+    }
+
+    //instance methods
+}
+let employee = new Employee()
+//access object properties
+console.log(`id ${employee.id}`)
+console.log(`Name ${employee.name}`)
+console.log(`status ${employee.status}`)
+
+
+Constructor parameters:
+..........................
+
+1.constructor is just like functions, which takes args with default value, optional parameter.
+class Employee {
+    //declare variables
+    id: number
+    name: string
+    status: boolean
+    //constructors variables are local variable
+    constructor(id: number = 0, name?: string, status: boolean = false) {
+        this.id = id
+        this.name = name
+        this.status = status
+    }
+
+    //instance methods
+}
+let employee = new Employee()
+//access object properties
+console.log(`id ${employee.id}`)
+console.log(`Name ${employee.name}`)
+console.log(`status ${employee.status}`)
+
+employee = new Employee(1,'Subramanian',true)
+//access object properties
+console.log(`id ${employee.id}`)
+console.log(`Name ${employee.name}`)
+console.log(`status ${employee.status}`)
+
+Object property initalization after object creation:
+...........
+class Employee {
+    //declare variables
+    id: number
+    name: string
+    status: boolean
+    //constructors variables are local variable
+    constructor(id: number = 0, name?: string, status: boolean = false) {
+        this.id = id
+        this.name = name
+        this.status = status
+    }
+
+    //instance methods
+}
+let employee = new Employee()
+//access object properties
+console.log(`id ${employee.id}`)
+console.log(`Name ${employee.name}`)
+console.log(`status ${employee.status}`)
+
+employee = new Employee(1, 'Subramanian', true)
+//access object properties
+console.log(`id ${employee.id}`)
+console.log(`Name ${employee.name}`)
+console.log(`status ${employee.status}`)
+
+employee = new Employee()
+
+//set new object properties
+employee.id = 100
+employee.name = 'Ram'
+employee.status = true
+
+//access object properties
+console.log(`id ${employee.id}`)
+console.log(`Name ${employee.name}`)
+console.log(`status ${employee.status}`)
+
+Encasulation:
+
+What is encasulation?
+
+To Prevent code sharing from code to another.
+
+code - collection of classes, variables,functions,......
+
+code is represented inside file.
+
+pl provides keywords to ensure that , how  we can allow the code to be shared
+
+TS provides keywords to prevent code sharing
+ 
+ -public - any where
+ -private - with in class 
+ -protected - with in class + inheritance
+
+only class members are public/private/protected.
+
+if you declare any member(var,methods) => by default is public.
+
+
+Explicit public:
+class Employee {
+    //declare variables
+    public id: number
+    public name: string
+    public status: boolean
+    //constructors variables are local variable
+    constructor(id: number = 0, name?: string, status: boolean = false) {
+        this.id = id
+        this.name = name
+        this.status = status
+    }
+
+}
+let employee = new Employee(1, 'Subramanian', true)
+//access object properties
+console.log(`id ${employee.id}`)
+console.log(`Name ${employee.name}`)
+console.log(`status ${employee.status}`)
+
+methods and public Key:
+......................
+class ProductService {
+
+    //methods
+    public findAll(): string {
+        return "findAll"
+    }
+
+    public save(name: string): string {
+        return "saved"
+    }
+}
+
+let productService = new ProductService()
+console.log(productService.findAll())
+console.log(productService.save("product"))
+..................................................................................
+
+private :
+ variables and methods can be declared private which cant be accessed outside the class.
+
+class Auth {
+    private userName: string
+    private password: string
+    constructor() {
+        this.userName = 'admin'
+        this.password = 'admin'
+    }
+}
+let auth = new Auth()
+console.log(auth.userName)
+
+
+src/index.ts:11:18 - error TS2341: Property 'userName' is private and only accessible within class 'Auth'.
+
+11 console.log(auth.userName)
+                    ~~~~~~~~
+
+[4:46:
+
+private methods:
+
+class Auth {
+    private userName: string
+    private password: string
+    constructor() {
+        this.userName = 'admin'
+        this.password = 'admin'
+    }
+    private login(){
+        return true
+    }
+}
+let auth = new Auth()
+console.log(auth.userName)
+console.log(auth.login())
+rc/index.ts:15:18 - error TS2341: Property 'login' is private and only accessible within class 'Auth'.
+
+15 console.log(auth.login())
+................................................................................                    
+			private,public usecases:
+
+
+Without code Refactoring:
+class Employee {
+    //declare variables
+    id: number
+    name: string
+    status: boolean
+    //constructors variables are local variable
+    constructor(id: number = 0, name?: string, status: boolean = false) {
+        this.id = id
+        this.name = name
+        this.status = status
+    }
+
+}
+
+=> inside class we have declared variables
+=> variables have been initialized inside constructor.
+
+
+variables types:
+
+1.instance variable
+  variable declared inside class
+2.local variables
+  variables are declared inside method(including constructor)
+  or method args / constructor args
+
+default scope of instance variables  all are public
+
+Note:
+ how to reduce variable declarations(instance variable declaration)
+
+Typescript provides a facility to "Treat local variable as instance variable: constructor args"
+
+ constructor args can be converted from local to instance variables
+
+ why : to reduce code.
+
+How to convert local variables into instance variables?
+
+ "Add" -public / private keywords in the constructor args
+
+Level -1 : remove class variable declaration and add public keyword in constructor arg
+
+class Employee {
+    constructor(public id: number = 0, public name?: string, public status: boolean = false) {
+        this.id = id
+        this.name = name
+        this.status = status
+    }
+}
+
+
+let employee = new Employee(1, 'Subramanian', true)
+//access object properties
+console.log(`id ${employee.id}`)
+console.log(`Name ${employee.name}`)
+console.log(`status ${employee.status}`)
+
+
+Level 2: remove initializer inside constructor:
+class Employee {
+    constructor(public id: number = 0, public name?: string, public status: boolean = false) {
+    }
+}
+
+let employee = new Employee(1, 'Subramanian', true)
+//access object properties
+console.log(`id ${employee.id}`)
+console.log(`Name ${employee.name}`)
+console.log(`status ${employee.status}`)
+....................................................................................
+			Hierachy
+...................................................................................
+
+IOC: Inversion of Control  and Dependency Injection
+....................................................
+
+Use case: how to declare dependency:
+
+class UserService {
+    constructor() {
+        console.log('UserService is invoked')
+    }
+    login(){
+        return "login success"
+    }
+}
+
+class UserController {
+    //dependency 
+    public userService:UserService
+    constructor() {
+        console.log('User controller is invoked')
+    }
+}
+let userService = new UserService()
+let userController = new UserController()
+userController.userService = userService
+console.log(userController.userService.login())
+
+
+Typescript recommends to inject/pass dependency via constructor:
+
+
+class UserService {
+    constructor() {
+        console.log('UserService is invoked')
+    }
+    login() {
+        return "login success"
+    }
+}
+
+class UserController {
+    //dependency 
+    public userService: UserService
+    constructor(userService: UserService) {
+        this.userService = userService
+    }
+    public auth(){
+        return this.userService.login()
+    }
+}
+let userService = new UserService()
+let userController = new UserController(userService)
+console.log(userController.auth())
+
+or 
+let userController = new UserController(new UserService())
+console.log(userController.auth())
+
+....................................
+
+
+class UserService {
+    constructor() {
+        console.log('UserService is invoked')
+    }
+    login() {
+        return "login success"
+    }
+}
+
+// class UserController {
+//     constructor(private userService: UserService) {
+//         this.userService = userService
+//     }
+//     public auth() {
+//         return this.userService.login()
+//     }
+// }
+class UserController {
+    constructor(private userService: UserService) { }
+    public auth() {
+        return this.userService.login()
+    }
+}
+// let userService = new UserService()
+// let userController = new UserController(userService)
+// console.log(userController.auth())
+
+let userController = new UserController(new UserService())
+console.log(userController.auth())
+.....................................................................................
+
+IS A
+Advanced Types
+Generics
+Modularity
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
