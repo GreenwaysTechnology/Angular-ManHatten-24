@@ -432,6 +432,344 @@ if (firstName) {
 } else {
     console.log('not ok')
 }
+....................................................................................
+			 functions
+....................................................................................
+
+How to declare functions?
+
+How to invoke functions
+
+Function args and parameters
+
+ES 6 arrows functions
+
+
+Declare function:
+//function  declaration
+
+function sayHello() {
+    //function body
+  console.log('hello')
+}
+//invoke function
+sayHello()
+
+..................
+Args and parameters
+//function parameters and args
+
+//a and b are args
+function add(a, b) {
+   console.log(`a ${a} b ${b}`)
+}
+add(10,10)
+add("10","10")
+
+Ts by default does not allow empty values(undefined)
+//a and b are args
+function add(a, b) {
+   console.log(`a ${a} b ${b}`)
+}
+//10,10 are parameters
+add(10,10)
+add("10","10")
+add() //error
+................
+
+Adding type to args:
+
+//a and b are args
+function add(a: number, b: number) {
+    console.log(`a ${a} b ${b}`)
+}
+//10,10 are parameters
+add(10, 10)
+add("10", "10")
+
+src/index.ts:9:5 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+9 add("10", "10")
+      ~~~~
+
+[2:40:35 PM] Found 1 error. Watching for file changes.
+....................................................................................
+
+Return value:
+
+//a and b are args
+function add(a: number, b: number) {
+    console.log(`a ${a} b ${b}`)
+    return a + b 
+}
+//10,10 are parameters
+console.log(add(10, 10))
+
+
+Return with type:
+//a and b are args
+function add(a: number, b: number): number {
+    console.log(`a ${a} b ${b}`)
+    return `Result is ${a + b}` 
+}
+//10,10 are parameters
+console.log(add(10, 10))
+
+
+src/index.ts:10:5 - error TS2322: Type 'string' is not assignable to type 'number'.
+
+10     return `Result is ${a + b}`
+       ~~~~~~
+
+[2:44:03 PM] Found 1 error. Watching for file changes.
+
+Return type : void:
+..................
+
+function save(): void {
+
+    return "saved"
+}
+src/index.ts:3:5 - error TS2322: Type 'string' is not assignable to type 'void'.
+
+3     return "saved"
+      ~~~~~~
+
+[2:45:39 PM] Found 1 error. Watching for file changes.
+.....................................................................................
+		   Default Args and Optional Parameter
+.....................................................................................
+
+Here if you dont supply, the default value will be passed
+//es 6 default args
+function multiply(a: number = 0, b: number = 0): number {
+    return a * b
+}
+console.log(multiply(10, 10))
+console.log(multiply())
+
+if you dont supply, but i dont want default, still i have to avoid compile time error
+Ts feature called optional parameter
+
+
+//ts optional args
+function multiply(a?: number, b?: number): number {
+    return a * b
+}
+console.log(multiply(10, 10))
+console.log(multiply())
+
+Note: optional and default parameters cant be mixed on a single variable.
+...................................................................................
+		  Functional Programming principles and ts/js
+....................................................................................
+
+1.Function is first class citizens
+   Function can be treated as value(literal)
+
+ Since function is value/literal, it can be assigned to a variable.
+
+for eg:
+  let a =10
+
+Anonymous function:
+  function without name.
+  let b = function(){}
+
+let hello = function () {
+  console.log('hello')
+}
+
+when you assign function into a variable, that variable can be used to invoke function
+
+//anonymous function es 5 syntax
+
+let hello = function () {
+    console.log('hello')
+}
+//invoke function
+hello()
+
+//anonymous with args and parameter
+let add = function (a: number = 0, b: number = 0): number {
+    return a + b
+}
+console.log(add(10,10))
+
+ES 6 anonymous function : Arrow function
+........................................
+//es 5 style 
+let hello = function () {
+    console.log('hello')
+}
+//es 6 style : arrow
+let hai = () => {
+    console.log('hi')
+}
+hai()
+
+//if function has single line of body: you can remove {}
+hai = () => console.log('hi')
+hai()
+
+//arrow and parameters and args
+let add = (a: number = 0, b: number = 0) => {
+    let c = a + b
+    console.log(`c ${c}`)
+}
+add(10, 10)
+
+//return
+add = (a: number = 0, b: number = 0): number => {
+    return a + b
+}
+add(10, 10)
+
+//if function returns only return statement: we can remove {} and return keywor
+add = (a: number = 0, b: number = 0): number => a + b
+
+add(10, 10)
+.....................................................................................
+			Higher order function
+....................................................................................
+
+What is higher order function?
+  Since function is value(literal)
+  
+ => you can assign into a variable
+ => you can pass function as parameter to another function - HOF
+ => you can return function from another function - HOF
+
+Passing function as Parameter:
+..............................
+function add(a, b) {
+    let c = a + b
+    console.log(c)
+}
+add(10, 10)
+let x = 10
+let y = 90
+add(x, y)
+
+
+function login(success) {
+    success()
+}
+
+login(function () {
+    console.log('login is success')
+})
+
+let myFun = function () {
+    console.log('login is success')
+}
+login(myFun)
+
+...
+Function as parameter with args:
+
+function login(success) {
+    success('login is success')
+}
+
+login(function (status) {
+    console.log(status)
+})
+
+let myFun = function (status) {
+    console.log(status)
+}
+login(myFun)
+
+......................
+
+Complex example:
+
+function login(userName: string, password: string, success: Function, failure: Function) {
+    if (userName === 'admin' && password === 'admin') {
+        success('login success')
+    } else {
+        failure('login failed')
+    }
+}
+
+login('admin', 'admin', function (status) {
+    console.log(status)
+}, function (err) {
+    console.log(err)
+})
+
+login('xrer', 'adsfsf', function (status) {
+    console.log(status)
+}, function (err) {
+    console.log(err)
+})
+
+Hof Arrow version:
+
+// function login(userName: string, password: string, success: Function, failure: Function) {
+//     if (userName === 'admin' && password === 'admin') {
+//         success('login success')
+//     } else {
+//         failure('login failed')
+//     }
+// }
+let login = (userName: string, password: string, success: Function, failure: Function) => {
+    if (userName === 'admin' && password === 'admin') {
+        success('login success')
+    } else {
+        failure('login failed')
+    }
+}
+
+// login('admin', 'admin', function (status) {
+//     console.log(status)
+// }, function (err) {
+//     console.log(err)
+// })
+// login('admin', 'admin', (status) => {
+//     console.log(status)
+// }, (err) => {
+//     console.log(err)
+// })
+// login('admin', 'admin', (status) => console.log(status), (err) => console.log(err))
+login('admin', 'admin', status => console.log(status), err => console.log(err))
+login('xxx', 'yyy', status => console.log(status), err => console.log(err))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
