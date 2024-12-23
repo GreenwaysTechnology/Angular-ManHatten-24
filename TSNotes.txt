@@ -1,0 +1,182 @@
+Typescript
+Reactive Programming -rxjs
+Angular
+node :
+vscode
+
+.......................................................................................
+
+Typescript:
+..........
+
+What is typescript?
+
+ Typescript that scales javascript.
+ scaling is nothing but expanding features.
+
+Javascript design approach
+
+-Javascript object based language not Object oriented.
+-Javascript is dynamically typed- types of the language is known during runtime.
+  -No compile time type checking.
+
+
+ECMA Standards:
+ ES 1,3,4,5
+ ES 6
+
+2009, The project was started to make javascript looks like other object oriented langugages
+ - classes,interfaces.... : coffee script.
+
+source code would be coffee script
+ 
+ Customer.coffee            
+  class,interfaces --compile    --Customer.js
+
+2010, Microsoft started project to create object oriented javascript using C#
+
+static typed javascript.
+
+ C# ---compiler------plain javascript.
+
+Problems with C#
+ 1.PORTABLITY.
+ 2.COMPLEXITY
+
+2012, ecma committe published a specfication, ECMA 6 spec
+ES 6 Features:
+ 1.classes
+ 2.let,const
+ 3.new literal types
+ 4.arrow function
+ 5.new Objects - Promise....
+ etc.......
+
+MS Started redesigning the whole project, target ecma 6 as base language.
+
+ ES 6 + Static Typing + added new extra fetures => The brith of Typescript.
+
+
+Typescript----compile----Plain javascript
+
+Typescript is strongly typed, object oriented  javascript.
+
+Now you can use type script to build better object oriented systems using javascript.
+
+
+TS is not compititor or replacer for javascript but it complements js.
+
+
+Object Oriented Principles:
+ 
+1.Abstraction
+2.Encaspulation
+3.Modualirty
+    -breaking the code 
+4.Typing
+   -polyphism
+      -compile - strongly typed
+      -runitme - strong typed
+5.Hierachy
+   -has-a
+   -is-a : inheritance
+................
+6.Concurrency
+7.Persistency.
+
+if any programming language follows the first 5 principles 100%, those languages are 
+called as "Object oriented Programming" languages
+
+if any language does not implement any one principle or partially, those languages are 
+called "Object based language".
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+Type scrit is a typed superset of javascript that compiles to plain javascript
+
+                  any browser,an host, any os, any device
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+Lab :
+
+1.nodejs
+2.ts compiler 
+3.editor - vs code
+
+select your work-dire
+
+>mkdir mytsapps
+
+cd mytsapps
+
+mytsapps> npm init --yes
+mytsapps> code .
+ 
+........................................................................................
+
+TS Compiler:
+
+mytsapps>npm install typescript --save-dev
+
+
+How to write ts code , compile?
+
+fileName.ts
+
+compiler - tsc
+
+tsc folder/fileName.tsc
+tsc src/index.tsc
+
+package.json 
+ scripts section
+
+scripts is for java script automation.
+
+scripts: {
+ "command" : "Task to executed"
+}
+
+if you run the command the task will be executed.
+
+commands are provided by npm by default , those are built in commands
+"start"
+"test"
+"install"
+ ........
+
+task:
+ "start" : "node index.js"
+ 
+npm start ----->
+
+commands can even be custom commands
+
+"subu"  : "node index.js"
+
+npm run subu
+
+I m going to automate typescript compilation using npm script.
+
+"build": "tsc src/index.ts"
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+package.json
+{
+  "name": "tsapps",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
