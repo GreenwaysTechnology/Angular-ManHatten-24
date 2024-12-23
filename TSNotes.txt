@@ -180,3 +180,288 @@ package.json
     "typescript": "^5.7.2"
   }
 }
+How to run?
+tsapps/index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <h1>Typescript App</h1>
+   <script src="build/index.js"></script> 
+</body>
+</html>
+
+In order to run we need web server
+......................................................................................
+How to compile the code automatically ,without compiling code manually?
+ we compiler option 
+   --watch
+
+package.json
+ "start" : "tsc --watch"
+..................................................................................
+			 Language fundamentals
+..................................................................................
+
+variables,types,iterals
+
+var | let | const variableName= value(literal)
+
+var i =100
+let i = 200
+
+types of literals:
+..................
+1.number
+2.string
+3.boolean
+4.undefined
+5.NaN
+6.infinity
+7.null
+8.function
+9.object
+
+based on literal only type is identified
+
+1.number
+   number,NaN,infinity
+2.string
+3.boolean
+4.undefined
+5.function
+6.object
+  null,object
+
+ts types:
+ js types + 
+ 
+1.enum
+2.any
+3.Tuple
+4.Reference types
+   class,interfaces,type
+
+
+variable declaration:
+
+ let variableName:Type =Value
+
+
+Variable and type declaration:
+//basic variable declaration
+
+let firstName:string="Subramanian"
+console.log(firstName)
+
+firstName=900
+
+here compiler catches the error -compile time error
+
+[12:30:45 PM] File change detected. Starting incremental compilation...
+
+src/index.ts:6:1 - error TS2322: Type 'number' is not assignable to type 'string'.
+
+6 firstName=900
+  ~~~~~~~~~
+
+[12:30:45 PM] Found 1 error. Watching for file changes.
+
+................
+String:
+//string : "",'',``,`` with string interpolation
+
+let firstName: string = "Subramanian"
+let lastName: string = 'Murugan'
+//string concatation using +
+let fullName: string = firstName + lastName
+//string concatation using ``
+fullName = `${firstName} ${lastName}`
+
+console.log("Name" + fullName)
+console.log("Name", fullName)
+console.log(`Name ${fullName}`)
+
+//multi line using back tic
+
+let template=`
+ <div>
+    <h1>Hello</h1>
+ </div>
+`
+console.log(template)
+
+Number:
+//numbers size is 64 bit aka double
+
+let price: number = 100
+let qty: number = 10
+let total: number = price * qty
+console.log(`Total ${total}`)
+
+boolean:
+//boolean
+let isValid:boolean = true 
+let isEnabled:boolean = false 
+
+console.log(` Valid : ${isValid}`)
+console.log(` Enabled : ${isEnabled}`)
+...................................................................................
+			 Type inference
+...................................................................................
+let variable:type = literal
+
+int a =10;
+
+a = "hello" ;;compiler will throw error : compile time vertification.
+
+
+Ways of declaring :
+
+1.expilicit
+  let variableName:type = value
+
+2.implicit : Type inference
+
+   if any variable is assigned with specific type
+
+ let age =20;
+  now variable value is 20, so ts initailizes the type of age is number ,to be verified
+in furture assignements
+
+ age=90;
+ age ="hess" ;;//error is thrown : type infered.
+
+// type system
+
+//Explicit type declaration
+//strings
+let firstName:string = "Subramanian";
+console.log(`First Name ${firstName}`);
+//firstName = 1000;
+firstName = "Test";
+
+//numbers
+let stockValue:number =100;
+stockValue =900;
+
+//booleans
+let isEnabled:boolean  =true;
+isEnabled  =false;
+
+////////////////////////////////////////////////////////////////////////////////
+//implicit type declaration : Type inferance is enabled, based on initail value assigment
+let age = 20;
+console.log(`Age ${age}`)
+age = 18;
+
+//age = "hello"
+let isActive= true;
+//isActive = "test";
+///////////////////////////////////////////////////////////////////////////////////
+
+Undefined:
+
+//undefinded with implicit
+
+let a;
+console.log(`a ${a}`)
+a = 100
+console.log(`a ${a}`)
+
+a = "Hello"
+
+console.log(`a ${a}`)
+
+//explicit
+let b: undefined
+b = 900
+
+any:
+
+
+let a:any;
+console.log(`a ${a}`)
+a = 100
+console.log(`a ${a}`)
+
+a = "Hello"
+
+console.log(`a ${a}`)
+
+any is recommended incase if you have requirement that variable need to take any value.
+
+NaN:
+//NaN
+
+let a: any = "$100";
+let b = 100
+let c = a * b
+console.log(c)
+
+
+Infinity: div/0
+
+let a: number = 100
+let b: number = 0
+let c = a / b
+console.log(`C ${c}`)
+
+....................................................................................
+
+//advanced booleans ;
+//in js everthing is true exepect the following values
+/**
+ * falsy values
+ * 1.boolean false
+ * 2.0
+ * 3.undefined
+ * 4.NaN
+ * 5.null
+ * 6.empty string ""/ ''
+ */
+
+//
+let firstName = "Subramanian"
+if (firstName) {
+    console.log('ok')
+} else {
+    console.log('not ok')
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
