@@ -1,10 +1,7 @@
-var login = function (userName, password, success, failure) {
-    if (userName === 'admin' && password === 'admin') {
-        success('login success');
-    }
-    else {
-        failure('login failed');
-    }
-};
-login('admin', 'admin', function (status) { return console.log(status); }, function (err) { return console.log(err); });
-login('xxx', 'yyy', function (status) { return console.log(status); }, function (err) { return console.log(err); });
+import { UserController } from './controllers/User.controller.js';
+import { UserService } from './services/User.service.js';
+function main() {
+    var usrCtrl = new UserController(new UserService());
+    usrCtrl.init();
+}
+main();

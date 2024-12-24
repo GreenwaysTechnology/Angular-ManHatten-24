@@ -1,0 +1,266 @@
+
+Decorators:
+..........
+
+annotations: @annotation , @Override,@Entity,@Controller
+
+-meta programming : isloate the code logic from main program to ouside, when you 
+req, you inject those features , into code during runtime.
+
+Decorators are experimental feature in es7. but ts added this language with experimental
+mode.
+
+How to create our own decorators?
+
+Steps:
+
+1.declare decorator
+  function , based on syntax
+2.use the decorator
+  you can use on class,method,field
+  @functionname.
+
+
+Steps:
+
+//decorators : 
+
+//declare decorator
+
+function Course(target: any) {
+    console.log('Course decorator is activated')
+}
+
+//apply decorator/annotate
+
+@Course
+class Student {
+    constructor() {
+
+    }
+}
+let student = new Student();
+
+src/index.ts:12:7 - error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+12 class Student {
+         ~~~~~~~
+
+
+{
+    "compilerOptions": {
+           "experimentalDecorators": true,
+          "emitDecoratorMetadata": true
+    },
+    "files": [
+        "src/index.ts"
+    ]
+}
+
+////////////////
+
+Decorator logic and error
+//decorators : 
+
+//declare decorator
+
+function Course(target: any) {
+    console.log('Course decorator is activated')
+    //logic for decorator
+    Object.defineProperty(target.prototype, "subject", {
+        value: 'Typescript'
+    });
+
+}
+
+//apply decorator/annotate
+
+@Course
+class Student {
+    constructor(public firstName: string, public lastName: string) { }
+}
+let student = new Student("Subramanian", "Murugan");
+console.log(`${student.firstName} ${student.lastName} is learning ${student.subject} `)
+
+
+[9:40:01 am] File change detected. Starting incremental compilation...
+
+src/index.ts:21:77 - error TS2339: Property 'subject' does not exist on type 'Student'.
+
+21 console.log(`${student.firstName} ${student.lastName} is learning ${student.subject} `)
+
+
+Here typescript compiler is telling that , i am not able to findout "subject" is part of Student Type
+
+
+How to fix this problem? how to tell ts compiler dont worry this is runtime property.
+
+ "type alise" : as
+ 
+
+full decorator:
+//decorators : 
+
+//declare decorator
+
+function Course(target: any) {
+    console.log('Course decorator is activated')
+    //logic for decorator
+    Object.defineProperty(target.prototype, "subject", {
+        value: 'Typescript'
+    });
+
+}
+
+class CourseType {
+    firstName?: string;
+    lastName?: string;
+    subject?: string;
+}
+
+//apply decorator/annotate
+
+@Course
+class Student {
+    constructor(public firstName: string, public lastName: string) { }
+}
+// let student = new Student("Subramanian", "Murugan") as CourseType
+let student = new Student("Subramanian", "Murugan") as any //type coericion
+console.log(`${student.firstName} ${student.lastName} is learning ${student.subject} `)
+////////////////////////////////////////////////////////////////////////////////////////////
+
+How to pass parameter - string,object
+How to decorate multiple decorators
+
+
+//decorator with input
+
+function Course(courseName: string) {
+    //logic should be inside  inner function, that function should be returned
+    return function (target: any) {
+        //logic for decorator
+        Object.defineProperty(target.prototype, "subject", {
+            value: courseName
+        });
+    }
+}
+type TeacherType = {
+    id: number,
+    name: string
+}
+function Teacher(teacher: TeacherType) {
+    //logic should be inside  inner function, that function should be returned
+    return function (target: any) {
+        //logic for decorator
+        Object.defineProperty(target.prototype, "trainer", {
+            value: teacher
+        });
+    }
+}
+
+@Course('Rxjs')
+@Teacher({ id: 1, name: 'Karthik' })
+class Student {
+    constructor(public firstName: string, public lastName: string) { }
+}
+// let student = new Student("Subramanian", "Murugan") as CourseType
+let student = new Student("Subramanian", "Murugan") as any //type coericion
+console.log(`${student.firstName} ${student.lastName} is learning ${student.subject} from ${student.trainer.name} `)
+//
+////////////////////////////////////////////////////////////////////////////////////////////
+
+Field level decorator:
+.......................
+
+function Course(courseName: string = 'Type Script') {
+    return function (target: any) {
+        //biz logic
+        Object.defineProperty(target.prototype, 'courseName', { value: courseName })
+    }
+
+}
+
+function Input(label: string) {
+    //target would be object(Student) and key would be firstName ...
+    return function (target: any, key: string) {
+        //logic
+        Object.defineProperty(target, key, {
+            get: () => label
+        });
+    }
+}
+
+
+
+@Course()
+class Student {
+    @Input('Subramanian')
+    firstName;
+    @Input('Murugan')
+    lastName;
+    constructor(firstName?: string, lastName: string = '') {
+        this.firstName = firstName
+        this.lastName = lastName;
+    }
+}
+let student = new Student() as any;
+console.log(`${student.firstName} ${student.lastName} is learning ${student.courseName}`)
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+Method level : 
+ decorator is added on top of method.
+
+function Course(courseName: string = 'Type Script') {
+    return function (target: any) {
+        //biz logic
+        Object.defineProperty(target.prototype, 'courseName', { value: courseName })
+    }
+
+}
+
+function Input(label: string) {
+    //target would be object(Student) and key would be firstName ...
+    return function (target: any, key: string) {
+        //logic
+        Object.defineProperty(target, key, {
+            get: () => label
+        });
+    }
+}
+
+function expandAble(value: boolean = true) {
+    return function (target: any, prop: any, propdescriptor: PropertyDescriptor) {
+        propdescriptor.writable = value;
+        console.log('target',target);
+        console.log('prop',prop);
+        console.log('propdescriptor',propdescriptor)
+    }
+}
+
+
+@Course()
+class Student {
+    @Input('Subramanian')
+    firstName;
+    @Input('Murugan')
+    lastName;
+    constructor(firstName?: string, lastName: string = '') {
+        this.firstName = firstName
+        this.lastName = lastName;
+    }
+    @expandAble(false)
+    public calculateCost(): number {
+        return 1000;
+    }
+}
+let student = new Student() as any;
+console.log(`${student.firstName} ${student.lastName} is learning ${student.courseName}`)
+console.log(`Cost for the course ${student.calculateCost()}`)
+//new cost ; this is default overriding; what if nobody should override.
+student.calculateCost = function () {
+    return 100;
+};
+console.log(`Cost for the course ${student.calculateCost()}`)
+//////////////////////////////////////////////////////////////////////////////////////////////
+

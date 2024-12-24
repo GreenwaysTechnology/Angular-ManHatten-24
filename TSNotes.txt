@@ -1503,6 +1503,51 @@ function respond(recipient: string, message: UserResponse): void {
 }
 
 respond("Princess Caroline", UserResponse.No);
+....................................&&&&&&&&&&&&&&&&&&&&............................
+			   Decorators
+....................................................................................
+
+
+annotations: @annotation , @Override,@Entity,@Controller
+
+-meta programming : isloate the code logic from main program to ouside, when you 
+req, you inject those features , into code during runtime.
+
+Decorators are experimental feature in es7. but ts added this language with experimental mode.
+
+What is decorator ?
+
+ It is simple javascript function.
+
+Steps
+
+1.declare decorator function
+ It is regular javascript function with some syntax.
+
+2.Use decorator
+ @Decorator
+		
+Types of decorator:
+1.class level decorator
+2.field level decorator
+3.method level decorator
+
+Angular provides lot of built in decorators,here we explore how to use those decorators and how it has been written.
+
+Level: 1 : Decorator:
+//declare decorator
+
+function Course(target: any) {
+    //logic
+    Object.defineProperty(target.prototype, "course", { value: 'Typescript' })
+}
+
+@Course
+class Student {
+   constructor(public name:string=""){}
+}
+let student = new Student("Ram") as any
+console.log(`${student.name} is learning ${student.course}`)
 
 
 
@@ -1510,10 +1555,140 @@ respond("Princess Caroline", UserResponse.No);
 
 
 
+Decorator with Input:
+//declare decorator with input
+
+function Course(subject: string) {
+    //decorator logic : higher order function : you have to return function
+    return function (target: any) {
+        Object.defineProperty(target.prototype, "course", { value: subject })
+    }
+}
+
+@Course('Angular')
+class Student {
+    constructor(public name: string = "") { }
+}
+let student = new Student("Ram") as any
+console.log(`${student.name} is learning ${student.course}`)
+..............................................................................................
+					
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,.........,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+				
+
+				Modules
+
+Javascript modularity:
+
+
+Modularity:
+..........
+
+In java Modularity , is presented via "Packages"
+
+Package organize the code  logically.
+
+Customer.java
+
+package com.ibm.cms
+
+public class Customer{}
+
+Java organizes code folders and files Physically.
+
+d:/javaapps/src/
+    com/ibm/cms/Customer.java
+
+
+What about javascript Modularity?
+
+ Javascript is file based modularity physically
+ but logically there is no such modularity at language level.
+
+collection of variable declarations and function.
+
+Once js started growing in large scale, dev struck to organize code.
+
+2000, Smart developers started thinking about how to modualrize js code.
+ 
+
+Module design patterns came.
+
+1.Namespace design pattern : 2000 : jquery
+2.AMD -Async Module Defintion : dojo
+---------------------------------------------------------
+3.CJS - Common JS =  namespace + amd
+4.ES 6 Module design pattern  = amd + cjs
+------------------------------------------------------------
+5.System = AMD = CJS + ES 6
+6.UMD = NAMESPACE + AMD + CJS = ES 6
+...........................................................................................
+		 Typescript and ES 6 Module design patterns
 
 
 
+How to share code?
+  export , export default
+How to link files
+ import
 
+export is used to share more code from the single file
+export default is used to share only one code from the single file
+
+code:
+ variables
+ functions
+ classes/interfaces/enums
+
+.................................................................................
+src/services/User.service.ts
+
+export class UserService {
+    findAll() {
+        return [
+            {
+                id: 1, name: 'a'
+            }
+        ]
+    }
+}
+//export { UserService }
+
+src/controllers/User.Controller.ts
+import { UserService } from "../services/User.service.js";
+
+export class UserController {
+    constructor(private userService: UserService) { }
+
+    public init() {
+        console.log(this.userService.findAll())
+    }
+}
+
+src/index.ts
+import { UserController } from './controllers/User.controller.js'
+import { UserService } from './services/User.service.js'
+
+function main() {
+    //create controller object
+    let usrCtrl = new UserController(new UserService())
+    usrCtrl.init()
+}
+main()
+
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <h1>Typescript App</h1>
+   <script src="build/index.js"  type="module"></script> 
+</body>
+</html>
 
 
 

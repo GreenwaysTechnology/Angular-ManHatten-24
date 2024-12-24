@@ -1,17 +1,9 @@
-enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
-}
-console.log(Direction.Up)
+import { UserController } from './controllers/User.controller.js'
+import { UserService } from './services/User.service.js'
 
-enum UserResponse {
-    No = 0,
-    Yes = 1,
+function main() {
+    //create controller object
+    let usrCtrl = new UserController(new UserService())
+    usrCtrl.init()
 }
-function respond(recipient: string, message: UserResponse): void {
-    console.log(recipient, message)
-}
-
-respond("Princess Caroline", UserResponse.No);
+main()
