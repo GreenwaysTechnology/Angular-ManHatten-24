@@ -1,30 +1,17 @@
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+}
+console.log(Direction.Up)
 
-class UserService {
-    constructor() {
-        console.log('UserService is invoked')
-    }
-    login() {
-        return "login success"
-    }
+enum UserResponse {
+    No = 0,
+    Yes = 1,
+}
+function respond(recipient: string, message: UserResponse): void {
+    console.log(recipient, message)
 }
 
-// class UserController {
-//     constructor(private userService: UserService) {
-//         this.userService = userService
-//     }
-//     public auth() {
-//         return this.userService.login()
-//     }
-// }
-class UserController {
-    constructor(private userService: UserService) { }
-    public auth() {
-        return this.userService.login()
-    }
-}
-// let userService = new UserService()
-// let userController = new UserController(userService)
-// console.log(userController.auth())
-
-let userController = new UserController(new UserService())
-console.log(userController.auth())
+respond("Princess Caroline", UserResponse.No);

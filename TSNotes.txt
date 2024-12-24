@@ -1170,27 +1170,339 @@ class UserController {
 let userController = new UserController(new UserService())
 console.log(userController.auth())
 .....................................................................................
+.....................******************............................................
+			IS-A - inheritance
 
-IS A
-Advanced Types
-Generics
-Modularity
-
-
-
+1.class inheritance - es 6 feature
+2.interface inheritance -ts feature
+3.abstract class inheritance -ts feature
 
 
 
+class :
+
+//class based inhiertance
+
+class Account {
+    constructor() {
+        console.log('Account')
+    }
+    protected deposit():number{
+        return 100
+    }
+}
+class SavingsAccount extends Account {
+    constructor() {
+        super() //calling parent class constructor
+        console.log('Savings Account')
+    }
+    deposit(): number {
+        return 1000
+    }
+}
+let sb = new SavingsAccount()
+console.log(sb.deposit())
+
+..........................................................................................
+interfaces:
+interface Flyable {
+    fly(): string
+}
+interface onInit {
+    init(): void
+}
+class Bird implements Flyable, onInit {
+    fly(): string {
+        return "Bird is flying"
+    }
+    init(): void {
+        console.log('init is called')
+    }
+}
+class Airplane implements Flyable {
+    fly(): string {
+        return "AirPlane is flying"
+    }
+}
+let bird = new Bird()
+console.log(bird.fly())
+bird.init()
 
 
+let air = new Airplane()
+console.log(air.fly())
+.........................................................................................
+
+Abstract class:
+
+abstract class Animal {
+    abstract eat(): string
+    saveAnimals(): void {
+        console.log('Save animals from the hunter')
+    }
+}
+class Tiger extends Animal {
+    eat(): string {
+        return 'tiger hunts other animals'
+    }
+}
+let tiger = new Tiger()
+console.log(tiger.eat())
+tiger.saveAnimals()
+.........................................................................................
+				 Literal Objects
 
 
+Declare Simple literal Object:
+//literal object
+
+let product = {
+    id: 1,
+    name: 'Phone',
+    qty: 100,
+    price: 10000,
+    inStock: true
+}
+console.log(`id ${product.id}`)
+console.log(`name ${product.name}`)
+console.log(`qty ${product.qty}`)
+console.log(`price ${product.price}`)
+console.log(`inStock ${product.inStock}`)
+
+Reference Types or Object types:
+...............................
+
+1.class as type
+2.interface as type
+3.type keyword as type
+For literal objects, how to enforce type safty for literal objects.
 
 
+class As Type:
+
+//class as type
+class Product {
+    id: number
+    name: string
+    qty: number
+    price: number
+    inStock: boolean
+}
+
+//literal object
+let product:Product = {
+    id: 1,
+    name: 'Phone',
+    qty: "100",
+    price: 10000,
+    inStock: true
+}
+console.log(`id ${product.id}`)
+console.log(`name ${product.name}`)
+console.log(`qty ${product.qty}`)
+console.log(`price ${product.price}`)
+console.log(`inStock ${product.inStock}`)
+
+src/index.ts:15:5 - error TS2322: Type 'string' is not assignable to type 'number'.
+
+15     qty: "100",
+       ~~~
+
+  src/index.ts:6:5
+    6     qty: number
+          ~~~
+    The expected type comes from property 'qty' which is declared here on type 'Product'
 
 
+Required and Optional Property:
+.............................
+
+//class as type
+class Product {
+    id: number
+    name?: string
+    qty?: number
+    price?: number
+    inStock?: boolean
+}
+
+//literal object
+let product:Product = {
+    id: 1,
+    name: 'Phone',
+    qty: "100",
+    price: 10000,
+    inStock: true
+}
+console.log(`id ${product.id}`)
+console.log(`name ${product.name}`)
+console.log(`qty ${product.qty}`)
+console.log(`price ${product.price}`)
+console.log(`inStock ${product.inStock}`)
+
+let newProduct:Product = {
+    id: 1,
+    name: 'Phone',
+    inStock: true
+}
+...........................................................................................
+interface as Type:
 
 
+//class as type
+interface Person {
+   id:number 
+   name:string
+}
+
+//
+let user:Person = {
+    id:1,
+    name:'Admin'
+}
+let employee:Person ={
+    id:1,
+    name:'Admin'
+}
+
+.........................
+
+type keyword:
+
+//class as type
+type Person = {
+    id: number
+    name: string
+}
+
+//
+let user: Person = {
+    id: 1,
+    name: 'Admin'
+}
+let employee: Person = {
+    id: 1,
+    name: 'Admin'
+}
+.....................................................................................
+			  	Union Type
+.....................................................................................
+
+A variable can hold more than one data type.
+
+let  a : number | string 
+
+a=100
+a="100"
+
+a =true -false
+
+//union type
+
+let myvar: number | string;
+myvar = 100;
+myvar = "900"
+// myvar =true
+
+//union type: a variable can hold many types or constant values
+
+let id: number | string
+id = 100;
+id = "abc100"
+//id =true //error
+
+//union type allows specifivalues
+let gender: "Male" | "Female" | "Third"
+
+gender = "Male"
+//gender ="others"
+
+let ticketStatus: 0 | 1
+
+function Mode(varient: "dark" | "light") {
+    console.log(varient)
+}
+Mode("dark")
+Mode("light")
+
+function Person(gender: "Male" | "Female" | "Third" | undefined, active: true | false) {
+    console.log(gender, active)
+}
+Person("Female", true)
+Person("Male", false)
+....................................................................................
+			    Generics
+
+What is generics?
+  To restict to have similar or same type of value inside container objects like array,Promise,Observable....
+
+Arrays:
+//arrays without generics
+
+let list = [1, "a", true]
+
+Arrays with Generics:
+let numList:number[] = [1, "a", true]
+src/index.ts:3:28 - error TS2322: Type 'string' is not assignable to type 'number'.
+
+3 let numList:number[] = [1, "a", true]
+                             ~~~
+
+src/index.ts:3:33 - error TS2322: Type 'boolean' is not assignable to type 'number'.
+
+3 let numList:number[] = [1, "a", true]
+                                  ~~~~
+
+//arrays without generics
+
+// let numList:number[] = [1, "a", true]
+
+let numList: number[] = [1, 2, 3]
+
+//Generics symbol <>
+let names: Array<string> = ["a", "b"]
+
+interface User {
+    id: string | number
+    name: string
+}
+let users: Array<User> = [
+    { id: 1, name: 'admin' },
+    { id: 2, name: 'guest' },
+
+]
+let users1: User[] = [
+    { id: 1, name: 'admin' },
+    { id: 2, name: 'guest' },
+
+]
+
+class UserService {
+    // public findAll(): Array<User> {
+    //     return users
+    // }
+    public findAll(): User[] {
+        return users
+    }
+}
+
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+}
+console.log(Direction.Up)
+
+enum UserResponse {
+    No = 0,
+    Yes = 1,
+}
+function respond(recipient: string, message: UserResponse): void {
+    console.log(recipient, message)
+}
+
+respond("Princess Caroline", UserResponse.No);
 
 
 
