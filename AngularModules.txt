@@ -1,0 +1,412 @@
+....................................................................................
+				Modularization
+...................................................................................
+
+Types of modules
+1.ES 6 modules
+  folders
+    files
+2.Logical modules
+   Using @NgModule
+
+ng new modulesapp
+
+inorder to create a new domain
+-create folder
+-create files
+-write code
+
+app/greeter/greeter.component.ts
+
+import { Component } from "@angular/core";
+
+@Component({
+    selector: 'app-greeter',
+    template: `
+        <div>
+            <h1>Greeter</h1>
+        </div>
+    `
+})
+export class GreeterComponent { }
+
+
+app/greeter
+ greeter.module.ts
+import { NgModule } from "@angular/core";
+import { GreeterComponent } from "./greeter.component";
+
+@NgModule({
+    declarations: [GreeterComponent],
+    imports: [],
+})
+export class GreeterModule { }
+
+app.module.ts
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { AppComponent } from "./app.component";
+import { GreeterModule } from "./greeter/greeter.module";
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule,GreeterModule],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+After running this we get error
+Error: src/app/app.component.html:3:3 - error NG8001: 'app-greeter' is not a known element:
+1. If 'app-greeter' is an Angular component, then verify that it is part of this module.
+2. If 'app-greeter' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
+
+3   <app-greeter></app-greeter>
+
+Scope: 
+ Any component is declared inside a module, will be available only within that module only. - private scope
+ how to make it available outside the module - public scope
+
+in the module configuration
+
+ exports -options.
+
+import { NgModule } from "@angular/core";
+import { GreeterComponent } from "./greeter.component";
+
+@NgModule({
+    declarations: [GreeterComponent],
+    imports: [],
+    exports: [GreeterComponent]
+})
+export class GreeterModule { }
+..................................&&&&&&&&&&&&&&&&&&................................
+		 Angular coding best pratices -Angular Style Guide
+...................................................................................
+
+https://angular.io/guide/styleguide
+
+File structure conventions:
+
+->file must follow the domain model.
+
+product:
+ Ng has lot of infra objects (module,component,pipe,services...)
+
+component:
+ It has so many files
+ .ts file
+    component file
+    component spec file -  unit testing file
+ .html file
+ .css file
+
+header.component.ts | spec.ts | .html | .css
+
+header.component.ts
+header.component.html
+header.component.css
+header.component.spec.ts
+
+Modules
+ header.module.ts
+
+
+style guide for file names
+
+domainname.component|service|directive|pipe.ts
+
+hero.component.ts
+hero.service.ts
+hero.directive.ts
+hero.pipe.ts
+
+Custom elements Naming convention:Component selectors
+
+ <app-root> - recommended
+  
+ <approot>  - not recommended.
+
+Do use dashed-case or kebab-case for naming the element selectors of components.
+
+Should i use always app?
+ Not Necessary
+app is default prefix, it can be changed - angular.json file
+
+ibm-root
+ibm-customer
+ibm-product
+............................................................................................
+
+class Names:
+
+ 1.Noun
+ 2.should be meaningfull
+ 3.should have suffix component,service,directive,pipe
+
+ HeaderComponent
+ HeaderService
+ HeaderDirective
+ HeaderPipe
+
+..................................................................................
+			      Automation
+
+Problems in the dev flow:
+
+Tasks:
+
+1.create folder
+2.create files - component-ts,html,css,spec
+3.create module
+4.declare class -cmp,service...
+5.refer the classes inside module
+6.you need to inject submodule into main module..
+
+DRY
+
+
+if you repeate the same thing for every object , which increases lot of time.
+
+Automation:
+ code generation automation
+
+angular cli tool to generate code.
+
+Generates and/or modifies files based on a schematic.
+
+ng generate <schematic> [options]
+ng g <schematic> [options]
+
+
+
+Task:
+1.create folder
+2.create submodule
+
+module:
+  --flat
+  --module
+  --route
+  --project
+etc...
+
+ng g m footer --module=app
+ng g m footer 
+
+create folder called footer
+update/inject footer module inside app
+
+create component, inside footer folder, inject into footer module, make it available public
+
+i dont want css file,i want html file,i dont want spec file
+
+ng g c footer/footer  --flat=true --export=true --inline-style=true --skip-tests=true   --module=footer
+
+ng g c footer/footer  --flat=true --export=true  --module=footer
+
+
+ --flat=true :  create any thing inside exsiting folder
+ --export=true : make it public
+ --inline-style=true : i dont want css file
+ --skip-tests=true  :dont create spec files
+ --module=footer  : inject inside footer module
+
+ng g m body --module=app   
+ng g c body/body  --flat=true --export=true --inline-style=true --skip-tests=true   --module=body
+...................................................................................
+				Modules Types
+
+Based on Creation:
+
+1.Custom Modules- UserModule,FooterModule
+2.Angular In built Module - BrowserModule,CommonModule etc...   
+
+Based on Usage:
+
+1.Features Module
+2.Shared Module
+
+Features Module
+  Module is created for each domain
+ eg:
+  ProductsModule,CustomersModule,PaymentsModule
+
+2.Shared Module
+  Module is used to shared somthing across the app
+
+In Angular, a Shared Module is a great way to organize and share common functionality, components, directives, and pipes across multiple modules in your application.
+
+Purpose of a Shared Module:
+...........................
+
+Reusability: Share common components, directives, and pipes.
+Declutter Modules: Avoid duplicating imports in multiple feature modules.
+Centralized Updates: Manage shared logic in one place
+
+Steps to Create a Shared Module
+
+Generate the Module:
+
+ng generate module shared
+
+Add Common Components, Directives, and Pipes:
+
+Place frequently used UI components, custom directives, and pipes here
+
+Export Required Entities:
+
+Export components, directives, and pipes so they can be used in other modules.
+
+Import Necessary Angular Modules:
+
+Add and export Angular Material modules, FormsModule, ReactiveFormsModule, etc., if needed.
+
+src/
+├── app/
+│   ├── shared/
+│   │   ├── shared.module.ts
+│   │   ├── custom-button/
+│   │   │   ├── custom-button.component.ts
+│   │   │   ├── custom-button.component.html
+│   │   │   ├── custom-button.component.css
+│   │   ├── pipes/
+│   │   │   ├── capitalize.pipe.ts
+│   │   ├── directives/
+│   │   │   ├── highlight.directive.ts
+│   ├── feature-one/
+│   │   ├── feature-one.module.ts
+│   │   ├── feature-one.component.ts
+│   │   ├── feature-one.component.html
+│   ├── feature-two/
+│   │   ├── feature-two.module.ts
+│   │   ├── feature-two.component.ts
+│   │   ├── feature-two.component.html
+│   ├── app.module.ts
+
+
+Step 1: Create a Shared Module
+
+shared.module.ts
+src/app/shared/shared.moudule.ts
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CustomButtonComponent } from '../custom-button/custom-button.component';
+
+
+@NgModule({
+  declarations: [
+    CustomButtonComponent,
+   ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
+  exports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CustomButtonComponent,
+   ]
+})
+export class SharedModule { }
+
+..........................................................................................
+Step 2: create shared Component.
+
+src/custom-button/custom-button.component.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-custom-button',
+  templateUrl: './custom-button.component.html',
+})
+export class CustomButtonComponent {
+  handleClick() {
+    alert('Button clicked!');
+  }
+}
+
+src/custom-button/custom-button.component.html
+
+<button (click)="handleClick()">Click Me!</button>
+.........................................................................................
+			How to use shared component into feature modules 
+
+Feature-1
+app/featureone
+
+feature-one-component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-feature-one',
+  templateUrl: 'feature-one.component.html',
+})
+export class FeatureOneComponent { }
+
+feature-one-component.html
+<h1>Feature One</h1>
+<app-custom-button></app-custom-button>
+
+feature-one-module.ts
+
+ Note: feature one module uses shared module, so what ever which is part of shared module 
+ is available, now you can access.
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FeatureOneComponent } from './feature-one.component';
+import { SharedModule } from '../shared/shared.module';
+
+@NgModule({
+  declarations: [FeatureOneComponent],
+  imports: [
+    SharedModule,
+  ],
+  exports: [
+     FeatureOneComponent
+  ]
+})
+export class FeatureOneModule { }
+
+Testing:
+Inject FeatureModule into appModule
+....................................
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppComponent } from './app.component';
+import { FooterModule } from './footer/footer.module';
+import { FeatureOneModule } from './featureone/feature-one.module';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FooterModule,
+    FeatureOneModule,
+],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+src/app.component.html
+<div>
+  <h1>Application</h1>
+  <app-feature-one></app-feature-one>
+  <app-footer></app-footer>
+</div>
+
+Feature One and Feature Two both use the Custom Button Component, Capitalize Pipe, and Highlight Directive from the Shared Module.
+Shared functionality is centralized, and there’s no duplication of code or imports.
+///
+Use case:
+ create feature-two and reuse
