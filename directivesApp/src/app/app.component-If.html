@@ -1,0 +1,21 @@
+<!-- Only If -->
+<!-- <div *ngIf="isLoggedIn">
+    Welcome, user!
+</div> -->
+
+<!-- <div *ngIf="isLoggedIn; else loggedOut">
+    Welcome, user!
+</div>
+<ng-template #loggedOut>
+    <p>Please log in to continue.</p>
+</ng-template> -->
+
+<ng-container *ngIf="isLoggedIn; then loggedInTemplate; else loggedOutTemplate"></ng-container>
+
+<ng-template #loggedInTemplate>
+  <p>Welcome, user!</p>
+</ng-template>
+
+<ng-template #loggedOutTemplate>
+  <p>Please log in to continue.</p>
+</ng-template>

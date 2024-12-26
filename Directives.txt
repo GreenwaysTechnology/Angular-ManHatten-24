@@ -1,0 +1,534 @@
+				Directives
+..............................................................................................
+What is directive?
+  Directive is custom element / attribute..
+
+<app-root> ,<app-root [title]>
+
+Types of Directives:
+1.Template directive /Components
+2.Structural directive
+3.Attribute directive
+
+1.Template directive
+   The directive with Template ; all components create template directive
+  <app-root> ----------------template directive
+  <app-profile>--------------template directive
+
+All component's meta data is inherited from Directive meta.
+Directive is parent , Component is child
+
+Every component is directive.
+
+
+2.Structural Directive
+   It is type of directive, used to change HTML Layouts.
+   They shape or reshape the DOM's "Structure" typically by adding, removing and manipulating
+   the host elements to which they attached.
+   
+  -Host element means html elements eg div,span,li,table.
+  -It is one of the "special attribute" directive
+  -All structural directive starts with "*" notation.
+
+Built in structural directives
+
+1.*ngFor : for loop
+2.*ngIf  : if condition
+3.*ngSwitch : switch...case
+
+List /Array rendering:
+......................
+
+Layouts:
+1.List view Layout
+   -ul li
+2.Card View Layout
+  div
+3.Grid View Layout
+  table tr td
+
+The *ngFor directive in Angular 15 is a structural directive used to repeat a template for each item in a collection. It's commonly used for rendering lists dynamically based on an array or iterable data structure.
+
+Syntax:
+<element *ngFor="let item of items">...</element>
+
+Examples:
+Basic List Rendering
+
+app.component.html
+
+<ul>
+  <li *ngFor="let fruit of fruits">
+    {{ fruit }}
+  </li>
+</ul>
+
+app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  fruits = ['Apple', 'Banana', 'Cherry'];
+
+}
+.....
+Object List:
+
+Steps:
+1.add mock data
+https://jsonplaceholder.typicode.com/todos
+
+app.component.ts
+import { Component } from '@angular/core';
+import { TODOS } from './mock-data/todos';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  fruits = ['Apple', 'Banana', 'Cherry'];
+  todos:Array<any>= TODOS
+
+}
+
+app.component.html
+<div>
+  <ul>
+    <li *ngFor="let fruit of fruits">
+      {{ fruit }}
+    </li>
+  </ul>
+  <div>
+    <div *ngFor="let todo of todos">
+       <p>{{todo.title}}</p>
+    </div>
+  </div>
+
+</div>
+
+..........
+
+Nested List:
+app.component.html
+
+<div>
+  <ul>
+    <li *ngFor="let category of categories">
+      {{ category.name }}
+      <ul>
+        <li *ngFor="let item of category.items">{{ item }}</li>
+      </ul>
+    </li>
+  </ul>
+  
+</div>
+app.component.ts
+import { Component } from '@angular/core';
+import { TODOS } from './mock-data/todos';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  categories = [
+    { name: 'Fruits', items: ['Apple', 'Banana', 'Cherry'] },
+    { name: 'Vegetables', items: ['Carrot', 'Peas', 'Spinach'] }
+  ];
+}
+..........
+*ngIf
+The *ngIf directive in Angular 15 is a structural directive used to conditionally include or exclude elements in the DOM based on the truthiness of an expression. It is a powerful tool for rendering elements dynamically.
+
+Syntax:
+<element *ngIf="condition">Content to display if condition is true</element>
+
+Key Features
+1.Conditional Rendering: Displays or removes an element based on the condition.
+2.else Block: Specifies alternative content if the condition is false.
+3.then Block: Used explicitly to show content when the condition is true.
+
+app.component.html
+
+<div *ngIf="isLoggedIn">
+  Welcome, user!
+</div>
+
+app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  isLoggedIn = true;
+}
+
+Using else Block:
+ You can display alternative content using an else block.
+
+app.component.html
+
+<div *ngIf="isLoggedIn; else loggedOut">
+  Welcome, user!
+</div>
+<ng-template #loggedOut>
+  <p>Please log in to continue.</p>
+</ng-template>
+
+
+app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  isLoggedIn = false;
+}
+
+Using then and else Blocks:
+
+1.The then block explicitly specifies the template for the true condition, while the else block specifies the false condition.
+
+<ng-container *ngIf="isLoggedIn; then loggedInTemplate; else loggedOutTemplate"></ng-container>
+
+<ng-template #loggedInTemplate>
+  <p>Welcome, user!</p>
+</ng-template>
+
+<ng-template #loggedOutTemplate>
+  <p>Please log in to continue.</p>
+</ng-template>
+
+......
+*ngSwitch:
+..........
+
+The *ngSwitch directive in Angular 15 is a structural directive used to conditionally display one template from a set of options based on a specific expression. It acts like a switch-case statement in programming.
+
+Directives in the ngSwitch Family:
+
+[ngSwitch]: The container directive that evaluates an expression.
+*ngSwitchCase: Defines a case to match the expression.
+*ngSwitchDefault: Specifies the default template if no case matches
+
+Basic Syntax:
+<div [ngSwitch]="expression">
+  <div *ngSwitchCase="'case1'">Content for case 1</div>
+  <div *ngSwitchCase="'case2'">Content for case 2</div>
+  <div *ngSwitchDefault>Default content</div>
+</div>
+
+eg:
+
+app.component.html
+<div [ngSwitch]="role">
+  <p *ngSwitchCase="'admin'">Welcome, Admin!</p>
+  <p *ngSwitchCase="'user'">Welcome, User!</p>
+  <p *ngSwitchDefault>Welcome, Guest!</p>
+</div>
+
+app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  role = 'admin';
+
+}
+
+Using Complex Content
+...........................................
+
+<div [ngSwitch]="status">
+  <div *ngSwitchCase="'success'" class="alert alert-success">
+    Operation was successful!
+  </div>
+  <div *ngSwitchCase="'error'" class="alert alert-danger">
+    An error occurred!
+  </div>
+  <div *ngSwitchDefault class="alert alert-warning">
+    Status unknown.
+  </div>
+</div>
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  status = 'success';
+
+}
+.......................................................................................
+			  Custom Structural Directives
+
+How to create our own Structural directives?
+
+ Mostly we dont create structural directives our own but still how we can create.
+
+Steps:
+
+1.Declare class
+
+export class AppRepeatDirective {
+    
+}
+2.Decorate with  @Directive decorator
+import { Directive } from "@angular/core";
+
+@Directive({
+    selector: '[appRepeat]'
+})
+export class AppRepeatDirective {
+
+}
+3.Write Directive logic
+
+import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+
+@Directive({
+    selector: '[appRepeat]'
+})
+export class AppRepeatDirective {
+    constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef) { }
+
+    @Input() set appRepeat(times: number) {
+        // Clear previous views
+        this.viewContainer.clear();
+
+        // Create the specified number of views
+        for (let i = 0; i < times; i++) {
+            this.viewContainer.createEmbeddedView(this.templateRef, { index: i });
+        }
+    }
+}
+Explanation:
+
+@Input(): Binds the number of times the element should be repeated.
+ViewContainerRef.clear(): Clears any previous content before creating new views.
+createEmbeddedView: Dynamically inserts the template into the DOM.
+
+
+Step 3: Inject directive into Module
+import { AppRepeatDirective } from './repeat.directive';
+
+
+@NgModule({
+  declarations: [
+    AppComponent,AppRepeatDirective
+  ],
+  imports: [
+    BrowserModule,FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+
+Step 3: Use the Directive
+Add the directive to your component’s HTML:
+<ul>
+  <li *appRepeat="5; let i = index">
+    Item {{ i + 1 }}
+  </li>
+</ul>
+......................................................................................
+		       Attribute Directives - Attribute Binding
+.......................................................................................
+HTML Elements and attributes:
+.............................
+
+<img src="imageUrl">
+      |         |
+     attribute  value
+
+Types of attributes and its binding:
+
+1.static attribute/static binding
+2.dynamic attributes/dynamic binding
+
+
+Static attributes/Binding:
+ <img src="../assets/c0494701.png"/>
+    
+Dynamic Attribute/Binding
+.........................
+<img [src]="variable"/>
+
+[] - notation is used to replace any dom elements values dynamically.
+
+app.component.html
+<img src="../assets/c0494701.png"/>
+
+<img [src]="imageSrc"/>
+
+
+app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  imageSrc = 'https://via.placeholder.com/150';
+}
+
+Custom Attribute Directive;
+
+How to create our own attribute directive?
+
+steps
+
+1.declare directive class and decorate
+
+import { Directive } from '@angular/core';
+
+@Directive({
+    selector : '[appHighlight]'
+})
+export class  HighLightDirective{
+    
+}
+2.Test directive is working or not
+
+    <h2 appHighlight >High light me</h2>
+
+DOM Maniupulation:
+
+Access Object , change its values
+
+ h2------Object---->change its value
+
+Using js you change it.
+
+ var element = document.getElementByid('xxx')
+
+
+DOM ACCESS INSIDE ANGULAR;
+
+1.INSIDE Directive
+  using "ElementRef" -Object
+
+this.element.nativeElement.style.backgroundColor = "yellow";
+
+Component(Directive) Life Cycle methods:
+
+Component initalization from scrach
+
+-->behind the scene (angular di system)
+ 
+ declartions:[HighLightDirective]--di reads this
+		-->di starts creating object
+			new HighLightDirective()--constructor runs
+ Objective of constructor is to create object only.
+
+After constructor completes 
+   Object is ready.
+
+
+highlight.directive.ts
+
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+
+@Directive({
+    selector: '[appHighlight]'
+})
+export class HighLightDirective { // implements OnInit{
+
+    @Input()
+    highlightColor: string = "";
+
+    //element will point on which dom element this directive attached
+    constructor(private element: ElementRef) { }
+    ngOnInit() {
+        this.highlight(this.highlightColor)
+    }
+
+    //listeners: native listners
+    @HostListener('mouseenter')
+    public onMouseMove() {
+        this.highlight('green')
+
+    }
+    @HostListener('mouseleave')
+    public onMouseOut() {
+        this.highlight('pink')
+
+    }
+    private highlight(color: string) {
+        this.element.nativeElement.style.backgroundColor = color;
+    }
+
+}
+
+app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { AppComponent } from './app.component';
+import { ReversePipe } from './reverse.pipe';
+import { PureAndImpurePipe } from './search.pipe';
+import { AppRepeatDirective } from './repeat.directive';
+import { HighLightDirective } from './highlight.directive';
+
+
+@NgModule({
+  declarations: [
+    AppComponent,ReversePipe,PureAndImpurePipe,AppRepeatDirective,
+    HighLightDirective
+  ],
+  imports: [
+    BrowserModule,FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+app.component.html
+<img src="../assets/c0494701.png"/>
+
+<img [src]="imageSrc"/>
+
+<h2 appHighlight [highlightColor]="color">High light me</h2>
+
+app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  imageSrc = 'https://via.placeholder.com/150';
+  color="pink"
+}
+.............................................................................................
+ 
+
+

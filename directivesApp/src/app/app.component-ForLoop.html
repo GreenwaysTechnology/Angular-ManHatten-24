@@ -1,0 +1,20 @@
+<!-- <div>
+   <ul>
+       <li *ngFor="let fruit of fruits">{{fruit}}</li>
+   </ul>
+</div> -->
+<!-- <div>
+    <section *ngFor="let todo of todos">
+       <h1>Id : {{todo.id}} User Id: {{todo.userId}}</h1>
+       <h2>{{todo.title}}</h2>
+       <h3>{{todo.completed ? "done" : "In Progress"}}</h3>
+    </section>
+</div> -->
+<ul>
+  <li *ngFor="let category of categories">
+    {{ category.name }}
+    <ul>
+      <li *ngFor="let item of category.items">{{ item }}</li>
+    </ul>
+  </li>
+</ul>

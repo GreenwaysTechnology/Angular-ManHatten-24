@@ -1,0 +1,13 @@
+<div [ngSwitch]="role">
+    <p *ngSwitchCase="'admin'">Welcome, Admin!</p>
+    <p *ngSwitchCase="'user'">Welcome, User!</p>
+    <p *ngSwitchDefault>Welcome, Guest!</p>
+</div>
+<ul>
+    <li *appRepeat="5; let i = index">
+        Item {{ i + 1 }}
+    </li>
+</ul>
+<ul>
+    <li></li>
+</ul>

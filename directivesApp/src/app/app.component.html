@@ -1,0 +1,11 @@
+<!-- Static Binding -->
+<img src="../assets/c0494701.png" />
+
+<img [src]="imageSrc" />
+
+<div>
+    <section *ngFor="let product of products">
+        <img [src]="product.image" height="100" [width]="width" />
+        <p appHighlight>{{product.description}}</p>
+    </section>
+</div>
