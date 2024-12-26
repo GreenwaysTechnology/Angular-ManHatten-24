@@ -1,0 +1,155 @@
+			    Data binding and Pipes
+...................................................................................
+Types of databinding
+1.interpolation
+2.property binding
+3.attribute binding
+4.event binding
+5.two way data binding
+6.class binding
+7.style binding
+
+interpolation:
+
+Angular is MVC framework
+M- Model -State -Data
+V-View
+C-Controller - Component
+
+VIEW<------>Component
+
+Template vs View:
+.................
+
+Template is compile time entity
+   Template has html + special angular instructions (collection of symbols)
+  {{}}
+  []
+  ()
+  *
+  #
+View is Runtime time - DOM elements
+
+Transferring data from the controller to View - Data binding
+
+State : Data
+ In Angular state can represented 
+
+1.primitives - numbers,strings,boolean
+2.objects - literal
+3.arrays - list
+
+
+Interpolation:
+
+interpolation is a feature used to bind data from the component class to the HTML template. It uses double curly braces ({{ }}) to display the values of variables or expressions in the view. This is also referred to as one-way data binding.
+
+{{}} - bind state variable inside template.
+..............................................................................................
+
+Syntax:
+
+Key Points About Interpolation
+
+<h1>{{ expression }}</h1>
+
+expression: Can be any valid JavaScript expression or property defined in the component class, such as a variable, method call, or an arithmetic operation.
+
+Valid Expressions:
+Interpolation can handle:
+
+Variables (e.g., {{ title }})
+Arithmetic (e.g., {{ number1 + number2 }})
+Method calls (e.g., {{ getSum() }})
+Property access (e.g., {{ user.name }})
+Ternary operators (e.g., {{ isLoggedIn ? 'Welcome' : 'Please Log In' }})
+
+Component = Data(state,model)
+
+eg:
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  //declare state/model
+  id = 1
+  firstName: string = "Subramanian"
+  lastName = "Murugan"
+  like = 10
+  status = true
+}
+
+app.component.html
+
+<div>
+   <h1>User Info</h1>
+   <h1>User Id : {{id}}</h1>
+   <h2>Name : {{firstName}} {{lastName}}</h2>
+   <h2>Like : {{like}}</h2>
+   <h2>Status : {{status  ? "Available" : "Not Available"}}</h2>
+</div>
+
+Objects:
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  //declare state/model
+  user = {
+    id: 1,
+    firstName: 'Subramanian',
+    lastName: 'Murugan',
+    status: true,
+    like:10
+  }
+}
+app.component.html
+
+<div>
+   <h1>User Info</h1>
+   <h1>User Id : {{user.id}}</h1>
+   <h2>Name : {{user.firstName}} {{user.lastName}}</h2>
+   <h2>Like : {{user.like}}</h2>
+   <h2>Status : {{user.status  ? "Available" : "Not Available"}}</h2>
+</div>
+
+How to add Type?
+types/user.type.ts
+export class User {
+    //! definite Assement operator
+    id!: number
+    firstName!: string
+    lastName!: string
+    status?: boolean
+    like?: number
+}
+import { Component } from '@angular/core';
+import { User } from './types/user.type';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  //declare state/model
+  user:User = {
+    id: 1,
+    firstName: 'Subramanian',
+    lastName: 'Murugan',
+    status: true,
+    like:10
+  }
+}
+Task :
+ 1.Create User Component (module,component) , Have all User details
+ 2.Refer the Component inside App Component
