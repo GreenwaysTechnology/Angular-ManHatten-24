@@ -1,0 +1,1123 @@
+
+
+Angular :
+
+What is angular?
+ In nutshell angular is javascript/ts mvc framework to build client side single page
+web applications.
+
+Angular is written using "Typescript","HTML","CSS".
+
+Types of web app
+
+1.Static web app - 1989
+2.Dyanmic web App -1996 -till date
+   cgi - c,perl
+   j2ee -servlet,jsp
+   asp
+   php
+3.Web Services
+   XML - SOAP
+   REST 
+   GrahQL
+4.SPA
+ html5
+ css
+ js
+  -angular.js
+
+ react
+ vue.js
+
+SSR
+ full ssr-full stack
+ 
+ ssg
+ isr
+******************************************************************************************
+Angular provides platform and apis to build end to applications.
+
+****************************************************************************************
+
+Angular Tech stack:
+
+1.HTML 5
+2.CSS 3
+3.Typescript
+4.Reactive Programming : rxjs
+********************************
+5.Webpack : Automation
+ -dev
+ -testing
+ -production
+*************************
+6.StackBlitz
+7.NativeScript 
+
+****************************************************************************************
+
+Angular Framework Architecture:
+...............................
+
+Angular framework is collection of many projects.
+
+Each project is built by team of developers, and finally they combine as single product.
+
+
+How the project is represented?
+
+ Each project is represented with namespace.
+
+eg:
+    supercart /ibmsupercart -code name given the project
+      -namespace
+  
+ paymentgateway
+
+     ibmsupercart/paymentgateway - name spacing.
+
+in angular all projects are namespaced
+
+  @ibmsupercart/paymentgateway
+
+  @angular/core
+  @angular/cli
+  @angular/common
+  @angular/forms
+  @angular/common/http
+ etc....
+
+What is @angular? --@-->npm private package
+ 
+Types of angular framework packages
+
+1.angular/google team packages - @angular
+2.thrid party - rxjs
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+Starts project : 
+
+@angular/cli Project:
+
+ 1.used to create project layouts
+ 2.used for code creations and automations
+cli project is powered with webpack.
+
+https://cli.angular.io/
+
+steps:
+npm install -g @angular/cli
+  This always install latest version.
+
+Install specific version:
+
+npm install -g @angular/cli@<specific-version>
+npm install -g @angular/cli@15.2.0
+
+G:\ManHatten>ng --help
+ng <command>
+
+Commands:
+  ng add <collection>            Adds support for an external library to your project.
+  ng analytics                   Configures the gathering of Angular CLI usage metrics.
+  ng build [project]             Compiles an Angular application or library into an output directory named dist/ at the given output path.      [aliases: b]
+  ng cache                       Configure persistent disk cache and retrieve cache statistics.
+  ng completion                  Set up Angular CLI autocompletion for your terminal.
+  ng config [json-path] [value]  Retrieves or sets Angular configuration values in the angular.json file for the workspace.
+  ng deploy [project]            Invokes the deploy builder for a specified project or for the default project in the workspace.
+  ng doc <keyword>               Opens the official Angular documentation (angular.io) in a browser, and searches for a given keyword.          [aliases: d]
+  ng e2e [project]               Builds and serves an Angular application, then runs end-to-end tests.                                          [aliases: e]
+  ng extract-i18n [project]      Extracts i18n messages from source code.
+  ng generate                    Generates and/or modifies files based on a schematic.                                                          [aliases: g]
+  ng lint [project]              Runs linting tools on Angular application code in a given project folder.
+  ng new [name]                  Creates a new Angular workspace.                                                                               [aliases: n]
+  ng run <target>                Runs an Architect target with an optional custom builder configuration defined in your project.
+  ng serve [project]             Builds and serves your application, rebuilding on file changes.                                                [aliases: s]
+  ng test [project]              Runs unit tests in a project.                                                                                  [aliases: t]
+  ng update [packages..]         Updates your workspace and its dependencies. See https://update.angular.io/.
+  ng version                     Outputs Angular CLI version.                                                                                   [aliases: v]
+Options:
+  --help  Shows a help message for this command in the console.                                                                                    [boolean]
+For more information, see https://angular.io/cli/.
+
+G:\ManHatten>ng version
+
+     _                      _                 ____ _     ___
+    / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
+   / △ \ | '_ \ / _` | | | | |/ _` | '__|   | |   | |    | |
+  / ___ \| | | | (_| | |_| | | (_| | |      | |___| |___ | |
+ /_/   \_\_| |_|\__, |\__,_|_|\__,_|_|       \____|_____|___|
+                |___/
+
+
+Angular CLI: 15.2.0
+Node: 18.20.5
+Package Manager: npm 10.9.2
+OS: win32 x64
+
+Angular: undefined
+...
+
+Package                      Version
+------------------------------------------------------
+@angular-devkit/architect    0.1502.0 (cli-only)
+@angular-devkit/core         15.2.0 (cli-only)
+@angular-devkit/schematics   15.2.0 (cli-only)
+@schematics/angular          15.2.0 (cli-only)
+
+............................................................................................
+			 Project creation
+...........................................................................................
+
+G:\ManHatten>ng new myfirstapp
+? Would you like to add Angular routing? No
+? Which stylesheet format would you like to use? CSS
+CREATE myfirstapp/angular.json (2720 bytes)
+CREATE myfirstapp/package.json (1041 bytes)
+CREATE myfirstapp/README.md (1064 bytes)
+CREATE myfirstapp/tsconfig.json (901 bytes)
+CREATE myfirstapp/.editorconfig (274 bytes)
+CREATE myfirstapp/.gitignore (548 bytes)
+CREATE myfirstapp/tsconfig.app.json (263 bytes)
+CREATE myfirstapp/tsconfig.spec.json (273 bytes)
+CREATE myfirstapp/.vscode/extensions.json (130 bytes)
+CREATE myfirstapp/.vscode/launch.json (474 bytes)
+CREATE myfirstapp/.vscode/tasks.json (938 bytes)
+CREATE myfirstapp/src/favicon.ico (948 bytes)
+CREATE myfirstapp/src/index.html (296 bytes)
+CREATE myfirstapp/src/main.ts (214 bytes)
+CREATE myfirstapp/src/styles.css (80 bytes)
+CREATE myfirstapp/src/assets/.gitkeep (0 bytes)
+CREATE myfirstapp/src/app/app.module.ts (314 bytes)
+CREATE myfirstapp/src/app/app.component.html (23083 bytes)
+CREATE myfirstapp/src/app/app.component.spec.ts (968 bytes)
+CREATE myfirstapp/src/app/app.component.ts (214 bytes)
+CREATE myfirstapp/src/app/app.component.css (0 bytes)
+√ Packages installed successfully.
+...........................................................................................
+			  Exploring the project layout
+
+
+package.json
+{
+  "name": "myfirstapp",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^15.2.0",
+    "@angular/common": "^15.2.0",
+    "@angular/compiler": "^15.2.0",
+    "@angular/core": "^15.2.0",
+    "@angular/forms": "^15.2.0",
+    "@angular/platform-browser": "^15.2.0",
+    "@angular/platform-browser-dynamic": "^15.2.0",
+    "@angular/router": "^15.2.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.12.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^15.2.0",
+    "@angular/cli": "~15.2.0",
+    "@angular/compiler-cli": "^15.2.0",
+    "@types/jasmine": "~4.3.0",
+    "jasmine-core": "~4.5.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.0.0",
+    "typescript": "~4.9.4"
+  }
+}
+tsconfig.json
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "lib": [
+      "ES2022",
+      "dom"
+    ]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}
+angular.json
+  Meta file for injecting information to webpack
+
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "myfirstapp": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/myfirstapp",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "myfirstapp:build:production"
+            },
+            "development": {
+              "browserTarget": "myfirstapp:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "myfirstapp:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "tsconfig.spec.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.css"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    }
+  }
+}
+...................
+
+src - folder
+index.html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Myfirstapp</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
+
+main.ts
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { AppModule } from './app/app.module';
+
+
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.error(err));
+
+
+src/app/app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+src/app/app.compoent.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'myfirstapp';
+}
+
+How to run angular app?
+
+ng serve
+ or
+npm start
+	
+
+G:\ManHatten\myfirstapp>ng serve
+√ Browser application bundle generation complete.
+
+Initial Chunk Files   | Names         |  Raw Size
+vendor.js             | vendor        |   1.71 MB |
+polyfills.js          | polyfills     | 313.72 kB |
+styles.css, styles.js | styles        | 208.84 kB |
+main.js               | main          |  47.20 kB |
+runtime.js            | runtime       |   6.52 kB |
+
+                      | Initial Total |   2.28 MB
+
+Build at: 2024-12-24T10:51:13.087Z - Hash: d89c7c03f1733b64 - Time: 9659ms
+
+** Angular Live Development Server is listening on localhost:4200, open your browser on http://localhost:4200/ **
+
+
+√
+..............................................................................................
+				Angular basic concepts
+
+1.Angular objects
+2.Dependency Injection
+3.MVC
+3.Work flow
+4.Data Binding
+
+ 
+
+Angular is object oriented frame work:
+ in angular every thing is object
+
+
+
+Angular Application Architecture:
+.................................
+Application is built by using object oriented model =>Object
+System
+
+In OO Primary actors  are "Objects".
+
+Since angular is written in TS,TS is oo language, We build using objects.
+
+Angular is pure object oriented system.
+In Angular every thing object.
+
+Application is collection of objects and static assets
+
+Application itself object called container object.
+
+Application object in angular called as "Module".
+
+Objects in Angular:
+
+Types of Objects
+1.infra objects
+   ->which provides app infra structure.
+  Service -> Data and biz logic
+2.Domain Objects
+   ->To represent domain-Biz - Model
+ eg: Customer,Employee,Order,Invoice,Bill etc...
+
+Types of Infra Objects:
+......................
+1.Module
+   container object,which contains object
+2.Component
+   which represents GUI Elements
+3.Directive
+   which represents GUI Elements
+4.Service
+   Which represents data and biz logic
+5.Pipe
+  which supports GUI elements for formatting.
+
+
+Infra objects are created using constructor pattern
+  =>ES 6 class
+DOMain objects are created by using literal objects
+  ->plain literal , array
+
+How objects are created? who is creating objects?
+
+
+class CurdRepository {
+      public save() {
+            console.log('Save method')
+      }
+      public findAll() {
+            console.log('Find All method')
+      }
+      public findById(id: number = 1) {
+            console.log('findById method')
+      }
+      public remove(id: number = 1) {
+            console.log('remove method')
+      }
+      public update(id: number = 1) {
+            console.log('update method')
+      }
+
+}
+class CustomerService {
+      //has-a relationship
+      constructor(private repository: CurdRepository) {
+      }
+      public save() {
+            this.repository.save();
+      }
+      public findAll() {
+            this.repository.findAll()
+      }
+      public findById(id: number = 1) {
+            this.repository.findById(1);
+      }
+      public remove(id: number = 1) {
+            this.repository.remove(id);
+      }
+      public update(id: number = 1) {
+            this.repository.update
+      }
+
+}
+
+//dependency injection
+//create repositort
+ let repository = new CurdRepository()
+
+//create service and then connect with repository.
+
+let service = new CustomerService(repository);
+service.save()
+
+imagine in realtime system, do you think that this possible?
+ -creating objects
+ -linking them in order
+
+
+It is not possible, then how to solve it?
+	https://martinfowler.com/articles/injection.html
+
+Inversion of Control Containers and the Dependency Injection pattern
+
+  ->Instead of developer creating and inject object through code, we will introduct
+ automation
+     "ioc containers"/
+
+Since ng is large object system, we need ioc, so ng provides built in ioc containers
+  -anguar di
+
+
+*****************************************************************************************
+
+Angular and MVC:
+
+Angular uses most popular web design pattern called m-model view- controller.
+
+View - GUI
+Controller -Object- Component
+Model --Object - biz objects-customer,order,invoice....
+
+*******************************************************************************************
+				DOM
+.........................................................................................
+
+What is DOM?
+  DOM means a specification created by W3C organization 
+
+if you want to understand  DOM, you need to understand how HTML works.
+
+
+HTML:
+
+1.HTML IS PL? - YES
+2.HTML Is compiled -YES
+3.HTML is excuted-YES
+
+index.html -source code
+
+<html>
+<head></head>
+<title><title>
+<body>
+  <div>
+     <h1>Welcome</h1>
+  </div>
+</body>
+</html>
+-------------------Browser
+loader---LOAD Code into browser
+ |
+  from file: or http:
+|
+Parser :
+   Parser is special compiler which converts source into lexcial tree(string tree)
+|
+
+body
+  div
+     h1
+        Welcome 
+     h1
+  div
+body
+|
+|
+Complier-Compilation : Convert this into assembly
+|
+body -load xxx
+  div
+     h1
+        Welcome 
+     h1
+  div
+body
+ .................................................................
+.....................................................................................
+				Runtime 
+.....................................................................................
+HTML Execution engine : Request Os ,to allocate memory :Runtime
+
+
+-LinkedList - c language
+
+body -Node
+  div -Node
+     h1 -Node
+        Welcome -Node
+     h1
+  div
+body
+|
+ Linking the Nodes: Tree
+body  -Node
+  |
+  div -Node
+    |
+     h1 -Node
+      |
+        Welcome -Node
+        |
+     h1
+  div
+|
+ Layout/Paint Engine: will convert nodes into pxs : final output
+
+Static web pages: htmls are displayed into browser.
+..............................................................................................
+In 1996,Netscap communication,Started an RND project called "How to manipulate the tree"
+
+Tree is written in c language,then we need another c program to communicate.
+
+But NETSCAP decided not to use C pl.
+
+Netscap wanted to put java like implementation inside browser to manipulate "Tree".
+
+that is birth of javascript.
+
+How to access nodes from javascript engine?
+  
+One spec was published ,As per that spec
+ "Document Object Model"
+    -How to represent document(elements/nodes) in object oriented way.->DOM
+
+ "Documents can be reprsented as Objects" : Object oriented Document Programming.
+
+............................................................................................
+
+How dom works?
+
+index.html           Browser runtime(C program)         Javascript Engine
+<h1>Hello</h1>       h1-Node                           h1- Object
+			Hello-Node			 Hello Object Property
+
+
+
+                 Every Html ELEMENT Inside Browser is "C Program"
+
+	       Every Html ELEMENT Inside javascript engine is "Object"
+
+
+javascript developer ---->uses api --->to communicate Object---->js engine---->browser engine.
+
+
+HTML(index.html)----Browser---read--compiled---image(tree)|runtime
+	tree--start allocating memory----->Linked List--->Tree
+
+ Stages of html                  
+   Within Browser Memory            Inside Javascript Engine
+       Tree-LinkedList(c) ---->     Object tree(DOM Tree)
+
+every html element is linked node inside browser.
+every html element inside js engine is object-dom
+.........................................................................................
+Note:
+
+ Every Element is Object
+ h1 ---Object
+ div ---Object
+ p ---Object
+ span ---Object
+
+What we are going to do?
+ we are going to mainipulates theses objects---DOM Programming.
+********************************************************************************************
+			Custom Elements and attributes:
+
+
+ <h1>----feed to browser ---->Compiler verfies this element is ready made or not
+				|
+			    Yes
+			     ----starts creating node
+
+
+ <hello>----feed to browser----compiler
+				  |
+				 no 
+				   - error : unKnownelement--parsed as text
+
+After HTML5 , HTML5 Spec added new feature: custom elements
+
+ <hello>----feed to browser----compiler
+				  |
+				 no 
+				   - Attach javascript to treate this is special element
+
+Angular uses custom elements every where?
+
+
+HTML 5
+  ->CUSTOM ELEMENTS
+   ->you can have your own html element,teach browser how to render it?
+  <app-root> ---->js--->{ }
+
+How to teach the browser?
+   via js
+
+How you are going to do in angular?
+  ->create collection of custom elements
+
+ <app-grid>------>Angular Code---Component--->JS Code
+
+Application:
+
+         <app-grid>      | class GridComponent{}
+                         |
+                         |
+
+Angular is all about custom tags(html) with behaviour(js).
+
+html is tree mode
+  
+  <body> -parent
+      <div>  -child
+	 <div> -child
+	     <h1>Hello</h>
+             <p>hai</p> 
+	 </div>
+      </div>
+
+each element or collection of elements represent by objects
+ if you combine all objects in order---> tree
+	=>Object tree=>Component Tree
+
+In html you can have only one body element(root).
+Similar rule in angular you can have only one root element
+  =>app-root
+	->
+ this app-root element must be inside body element by default.
+
+Custom elements must have naming convention called "keb case /dash case" notation
+<app-header>
+
+Work flow:
+
+ 1.open browser
+ 2.lanuch index.html
+  <body>
+        <app-root></app-root>
+  </body>
+
+ 3.start angular process
+  Angular is 100% modular framework
+  ->main.js==>main.ts
+	------>app.module.js --app.module.ts
+		 --->app.component.js -->app.component.ts
+				-><app-root> -Result
+////////////////////////////////////////////////////////////////////////////////////////
+
+Exploring basic code:
+
+main.ts
+ Entry file.
+  ->Angular runtime scans the main.ts ---> AppModule
+
+What is AppModule?
+  AppModule is object, container object, which contains other infrastructure objects(component,module(submodule),directives,Pipes,Services)
+ Module Object is Container whether it is mainmodule(appModule) or SubModule
+
+  ->Angular runtime scans the main.ts ---> AppModule
+        -->It scans the references inthe appModule, then starts creating objects accrodingly
+
+Infra Obejects(classes):
+.......................
+
+Infra classes are identified using Decorators
+
+Module:
+ @NgModule
+Component:
+  @Component
+Service
+  @Injectable
+Directive
+ @Directive
+Pipe
+ @Pipe
+
+How to declare module class?
+
+step 1:Declare class
+
+class AppModule {
+  
+}
+
+step 2 : if you refere this class outside this file, main.ts,you have to export
+
+export class AppModule {
+
+}
+
+Step 3: Qualify the class with decorator
+
+import { NgModule } from "@angular/core";
+
+@NgModule({})
+export class AppModule {
+
+}
+
+Step 4: Configure the class with Decorator Meta Data
+@NgModule({
+ meta data
+})
+metadata:
+ It is collection of information to the angular injector for creating objects
+ 
+1.declarations
+2.imports
+2.providers
+
+ Why we have 3 config category?
+   We have category of objects.
+
+Category:
+
+1.View Objects
+   If any view objects, we need to configure inside "declarations"
+  Component - @Component
+  Directives -@Directive
+  Pipe - @Pipe
+2.Container objects
+   if any container objects, we need to configure inside "imports"
+   Module Object- @NgModule
+  SubModules:
+     Module which is part of anthoer module
+ Types of SubModule:
+  1.User submodule: module created by us
+  2.Angular in built Submodules - Provided by framework
+3.Service objects
+   if any service objects we need to configure inside "providers"
+   Provider: @Injectable
+
+
+import { NgModule } from "@angular/core";
+import { AppComponent } from "./app.component";
+import { BrowserModule } from "@angular/platform-browser";
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule
+  ],
+  providers: []
+})
+export class AppModule {
+
+}
+ 
+BootStrapComponent:
+...................
+  Tells what is root page/index page/ landing page.
+
+import { NgModule } from "@angular/core";
+import { AppComponent } from "./app.component";
+import { BrowserModule } from "@angular/platform-browser";
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {
+
+}
+
+AppComponent:
+............
+What is component?
+  Object which represents, User interface
+
+Step 1: Declare component class
+class AppComponent {
+  
+}
+Step 2: decorate with Decorator
+import { Component } from "@angular/core";
+
+
+@Component({})
+class AppComponent {
+
+}
+
+Step 3: Component Meta data:
+...........................
+
+logic - code which is part of class
+template-ui - html + angular instructions
+styling -css
+
+selector:
+   It is identifier, which is mapped as "custom-tag"
+
+app-root
+ |   |
+prefix name of tag
+
+template and templateUrl
+
+template: `html `  -inline template
+templateUrl : 'template File' -external template
+
+import { Component } from "@angular/core";
+
+
+@Component({
+  selector: 'app-root', //custom tag,
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css']
+})
+export class AppComponent {
+
+}
+..
+
+Create Component:
+
+src/app/Welcome.component.ts
+import { Component } from "@angular/core";
+
+
+
+@Component({
+    selector: 'app-welcome',
+    template: `
+        <div>
+             <h1>Welcome</h1>
+      </div>
+    `
+})
+export class WelcomeComponent {
+
+}
+
+app.component.html
+<div>
+  <h1>MyApp</h1>
+  <app-welcome></app-welcome>
+</div>
+
+src/app/app.module.ts
+import { NgModule } from "@angular/core";
+import { AppComponent } from "./app.component";
+import { BrowserModule } from "@angular/platform-browser";
+import { WelcomeComponent } from "./welcome.component";
+
+@NgModule({
+  declarations: [AppComponent,WelcomeComponent],
+  imports: [
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
