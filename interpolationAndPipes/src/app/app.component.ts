@@ -8,11 +8,17 @@ import { User } from './types/user.type';
 })
 export class AppComponent {
   //declare state/model
-  user:User = {
+  user: User = {
     id: 1,
     firstName: 'Subramanian',
     lastName: 'Murugan',
     status: true,
-    like:10
+    lastLogin: new Date(),
+    like: 10
+  }
+  searchTerm: string = ""
+  items: string[] = ["angular", "react", "typescript"]
+  onMouseMove() {
+
   }
 }

@@ -153,3 +153,150 @@ export class AppComponent {
 Task :
  1.Create User Component (module,component) , Have all User details
  2.Refer the Component inside App Component
+
+.......................................................................................
+			 Data Formatting - Pipes
+.............................................................................................
+What is pipe?
+ pipe object used for data formatting.
+
+eg:
+ show uppercase
+ show money values - $,#,
+ show date format  - 1/10/2021 , feb 10 2021...
+ custom formats
+
+Angular provides lot of built in pipes, you can write your own pipes as well.
+
+Syntax:
+  some data | nameof the pipe.
+
+Pipe with Input :
+  some data | nameof the pipe:input
+
+Builtin pipes:
+
+DatePipe: Formats a date value according to locale rules.
+
+UpperCasePipe: Transforms text to all upper case.
+
+LowerCasePipe: Transforms text to all lower case.
+
+CurrencyPipe: Transforms a number to a currency string, formatted according to locale rules.
+
+DecimalPipe: Transforms a number into a string with a decimal point, formatted according to locale rules.
+
+PercentPipe: Transforms a number to a percentage string, formatted according to locale rules.
+
+asyncPipe : to bind list of values async
+   - used to bind observables directly.
+
+
+EG:
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'Angular 15 Interpolation Example';
+  today = new Date(); // e.g., December 25, 2024
+  price=1000.78
+  user = {
+    id:1,
+    name:'admin'
+  }
+}
+
+<div>
+  <p>Today is {{ today | date:'fullDate' }}</p>
+  <p>{{ title | uppercase }}</p>
+  <p>{{ title | lowercase }}</p>
+  <p>{{ price | currency:'INR':'symbol':'1.2-2' }}</p>
+  <p>{{user | json}}</p>
+</div>
+
+Pipe chaining:
+You can chain multiple pipes together for more complex transformations.
+
+<p>{{ today | date:'fullDate' | uppercase }}</p>
+
+Custom Pipes
+You can create your own pipes for specialized data transformations.
+
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'reverse'
+})
+export class ReversePipe implements PipeTransform {
+  transform(value: string): string {
+    return value.split('').reverse().join('');
+  }
+}
+
+Inject: inside declarations:
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppComponent } from './app.component';
+import { ReversePipe } from './reverse.pipe';
+
+@NgModule({
+  declarations: [
+    AppComponent,ReversePipe
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+app.component.html
+ <p>{{ 'Angular' | reverse }}</p>
+
+.
+
+Pure and Impure Pipes:
+......................
+Pure Pipes (default): Executed only when the input value changes.
+Impure Pipes: Executed every time Angular detects a change in the application.
+
+To create an impure pipe, set { pure: false } in the pipe decorator:
+@Pipe({
+  name: 'impureExample',
+  pure: false
+})
+
+Pure pipes are ideal for simple transformations where performance is a concern.
+Impure pipes should be used when you need to react to changes in more complex data, such as lists or objects. However, they can be less efficient.
+
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+    name: 'filterArray',
+    pure:false
+})
+export class PureAndImpurePipe implements PipeTransform {
+
+    transform(value: any[], searchTerm: string): any[] {
+        console.log('pipe is called')
+        return value.filter(item => item.includes(searchTerm));
+    }
+}
+
+  <div>
+    <input [(ngModel)]="searchTerm" placeholder="Search items" />
+    <ul>
+      <li (mousemove)="onMouseMove()" *ngFor="let item of items | filterArray:searchTerm">{{ item }}</li>
+    </ul>
+  </div>
+
+Check:
+ whether pipe is called or not, if you change pure: true and change:false

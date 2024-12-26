@@ -1,7 +1,21 @@
 <div>
    <h1>User Info</h1>
    <h1>User Id : {{user.id}}</h1>
-   <h2>Name : {{user.firstName}} {{user.lastName}}</h2>
+   <h2>Name : {{user.firstName | uppercase}} {{user.lastName | uppercase}}</h2>
    <h2>Like : {{user.like}}</h2>
-   <h2>Status : {{user.status  ? "Available" : "Not Available"}}</h2>
+   <h2>Last Login : {{user.lastLogin | date :'fullDate' | uppercase}}</h2>
+   <h2>Status : {{user.status ? "Available" : "Not Available"}}</h2>
+   <!--  -->
+   {{user | json}}
+   <!-- Custom Pipe -->
+   <h1> {{"angular" | reverse}}
+   </h1>
+   <!-- Pure and Impure -->
+    
+  <div>
+   <input [(ngModel)]="searchTerm" placeholder="Search items" />
+   <ul>
+     <li (mousemove)="onMouseMove()" *ngFor="let item of items | filterArray:searchTerm">{{ item }}</li>
+   </ul>
+ </div>
 </div>

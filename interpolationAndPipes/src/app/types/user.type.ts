@@ -4,5 +4,6 @@ export class User {
     firstName!: string
     lastName!: string
     status?: boolean
+    lastLogin?:Date 
     like?: number
 }
