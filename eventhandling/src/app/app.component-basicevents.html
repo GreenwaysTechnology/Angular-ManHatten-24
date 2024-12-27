@@ -1,0 +1,16 @@
+<div>
+  <h1>Event Handling</h1>
+  <button (click)="onClick()">Click</button>
+  <button (click)="onSave('test')">Save</button>
+
+  <ul>
+    <li *ngFor="let item of list">
+       <span (click)="onSelect(item)">{{item.name}}</span>
+    </li>
+  </ul>
+  <div>
+    <h1>{{selectedItem | json}}</h1>
+  </div>
+
+  
+</div>

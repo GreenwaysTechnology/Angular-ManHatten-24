@@ -1,0 +1,579 @@
+			Event Handling and Two way Data Binding
+.............................................................................................
+Event binding:
+
+types of events
+1.keyboard
+2.mouse events
+3.touch events
+
+(nameoftheEvent) ==>click
+
+  <button (click)="listerner()" class="btn btn-success">Click</button>
+
+If you read input, that input i want to show in screen
+  read input:
+
+Event is object, which is injected into listener function automatically.
+
+In Angular how to get event Object?
+Angular provides a special built in variable "$event" 
+$event variable has "Event Object" 
+
+
+Simple Event:
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  listener() {
+    console.log('click')
+  }
+}
+
+app.component.html
+<button (click)="listener()">Click</button>
+
+Passing data to the Listener:
+............................
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'eventhandling';
+
+  onSave(data:any){
+    console.log(data)
+  }
+}
+<div>
+  <h1>Event Handling</h1>
+  <button (click)="onClick()">Click</button>
+  <button (click)="onSave('test')">Save</button>
+</div>
+
+How to select an item when i click?
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'eventhandling';
+  selectedItem: any
+  list = [{
+    id: 1,
+    name: 'a1'
+  },
+  {
+    id: 2,
+    name: 'a2'
+  },
+  {
+    id: 1,
+    name: 'a3'
+  }
+
+  ]
+
+  //methods
+  onClick() {
+    console.log('click')
+  }
+
+  onSave(data: any) {
+    console.log(data)
+  }
+  onSelect(item: any) {
+    console.log(item)
+    this.selectedItem = item
+  }
+}
+
+app.component.html
+<div>
+  <h1>Event Handling</h1>
+  <button (click)="onClick()">Click</button>
+  <button (click)="onSave('test')">Save</button>
+
+  <ul>
+    <li *ngFor="let item of list">
+       <span (click)="onSelect(item)">{{item.name}}</span>
+    </li>
+  </ul>
+  <div>
+    <h1>{{selectedItem | json}}</h1>
+  </div>
+</div>
+
+How to get Input?
+
+<input  (input)="onUpdate($event)" type="text" placeholder="type something">
+
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  onUpdate(event:any) {
+    console.log(event.target.value)
+  }
+}
+..............................................................................................
+				  two way binding
+............................................................................................
+
+If any changes happens on "instance variable" which is bound on UI,gets updated because of
+events.
+Angular re render the screen for every update.
+
+User-----trigger--(Input)------>Listener is called--->|update the variable---When ever the
+variable is updated--->UI is re rendered.
+
+app.component.html
+<h1>{{name}}</h1>
+<input  (input)="onUpdate($event)" type="text" placeholder="type something">
+
+app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  name: string = ""
+  onUpdate(event: any) {
+    this.name = event.target.value
+  }
+}
+Code refactoring: 
+ Attribute binding + event binding
+
+<input (input)="listener" [value]="value">
+
+[(ngModel)]="user.name" = attribute + event binding
+
+<h1>{{name}}</h1>
+<input [(ngModel)]="name">
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  name: string = ""
+}
+
+2.event+property  [(ngModel)]
+ -ngModel
+     is Built in "DTO" object used to transfer data between view and controller.
+  <h2>City : {{city}}</h2>
+ <input  class="form-control" [(ngModel)]="city"  >
+
+Note; if you get the below error: ngModel is object, which is not availble right now.
+
+src/app/app.component.html:15:31 - error NG8002: Can't bind to 'ngModel' since it isn't a known property of 'input'.
+
+Solution:
+ngModel is part of "@angular/forms" "FormsModule", which must be injected into app.module.ts
+
+import {FormsModule} from '@angular/forms';
+
+@NgModule({
+  declarations:[AppComponent,ProfileComponent],
+  imports : [BrowserModule ,FormsModule],
+  providers: [],
+  ///entry point
+  bootstrap: [AppComponent]
+
+})
+export class AppModule{}
+............................................................................................
+				 Forms
+
+
+-Template driven forms
+
+1.Form data binding
+2.Form validation
+
+Steps:
+
+1.inject - Template driven forms which is from 'FormsModule'
+
+import {FormsModule} from '@angular/forms';
+
+
+@NgModule({
+   imports : [BrowserModule ,FormsModule],
+ })
+export class AppModule{}
+
+
+2.Create Model class
+export class PostFormModel{
+    constructor(public id: number, public title: string, public author: string){
+    }
+}
+
+3.create Object for those domain models
+
+export class AppComponent {
+  post: any;
+  constructor() {
+    this.post = new PostFormModel(Math.random(), 'Learn Angular', 'Misko')
+  }
+}
+
+Step 3 : 
+Create inital form Template
+<div class="container">
+  <h1>Post Form</h1>
+  <form>
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" class="form-control" id="title" required>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" required>
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit</button>
+
+  </form>
+</div>
+
+
+Step 4:
+
+Data binding
+   Binding textbox(form controls) with Model Object
+   We have many ways
+  1.through instance variable,$event
+  2.through [(ngModel)]="post.title"
+   ngModel = > it is an object from "FormsModule"
+   ngModel it is dto object=>data transfering between view and component.
+
+//
+Form Control value property is bound with name property of input control.
+
+<input [(ngModel)]="post.title" name="title" type="text" class="form-control" id="title" required>
+
+    <form>
+       <!--TODO: Remove this once testing over-->
+       <pre>{{post | json}}</pre>
+      <div class="form-group">
+         <label for="title">Title</label>
+         <input [(ngModel)]="post.title" name="title" type="text" class="form-control" id="title" required>
+       </div>
+       <div class="form-group">
+         <label for="name">Name</label>
+         <input [(ngModel)]="post.author" name="author" type="text" class="form-control" id="name" required>
+       </div>
+   
+       <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+
+*****************************************************************************************
+NgForm : 
+ It is object representation of "form" element.
+ Can be used to control form validations.
+ in order to access the NgForm object inside template. You have to use template reference
+
+<form #postForm> =>postForm points HTMLForm Object
+
+ngForm is Object which inherits HTMLForm
+
+class ngForm extends HTMLForm{
+  +extra behavior=>Ready made validation code
+  +form submission behviours
+}
+
+
+What is meaning of this code <form #postForm>?
+
+ HTMLFORMobject ----postPorm
+
+dummy code for the above template
+ let postForm =  new HTMLForm();
+
+what we need
+ let postForm = new NgForm()
+
+<form #postForm="ngForm"> 
+
+
+The variable postForm is now a reference to the NgForm 
+directive that governs the form as a whole.
+
+The NgForm directive:
+
+What NgForm directive? You didn't add an NgForm directive.
+
+Angular did. Angular automatically creates and attaches
+ an NgForm directive to the <form> tag.
+
+"The NgForm directive supplements the form element with additional features. 
+
+
+It holds the controls you created for the elements  with an "ngModel directive" and name attribute,
+ and monitors their properties, including their validity.
+ 
+It also has its own valid property which is true only if every contained control is valid."
+
+Note: NgForm is built Object ,has more logic for simplifying our form handling process.
+
+********************************************************************************************
+NgModel :
+
+ 1.Transfering data between UI and Controller .
+
+NgModel not only for data transfer, which does so many other things beyond twoway data binding.
+
+Track control(form element) state and validity with ngModel:
+.............................................
+
+Form element states:
+
+State 	                         Class if true 	  Class if false
+The control has been visited.  	  ng-touched 	    ng-untouched
+The control's value has changed.  ng-dirty 	    ng-pristine
+The control's value is valid. 	  ng-valid 	    ng-invalid
+
+Anguar provides built-in css styles for forms
+ eg:
+  ng-touched
+   ......
+
+State Tracking Steps:
+
+1.Look but don't touch.
+2.Click inside the name box, then click outside it.
+3.Add slashes to the end of the name.
+4.Erase the name.
+
+ng-untouched - if you dont touch
+ng-touched - if you touch
+ng-dirty - if you changed
+ng-invalid - if you remove all-empty field.
+
+
+Add custom CSS for visual feedback:
+
+Valid + Required - green Color
+Valid + optional - white color
+Invalid (required | optional) - red Color
+
+Angular Css:
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; /* red */
+}
+****************************************************************************************
+
+Adding validation block to our code:
+...................................
+
+NgModel is Child Object of FormControl Object
+
+class  Input{
+ 
+}
+class NgModle extends Input{
+  //extra features : state tracking,enabling validation.
+}
+
+<input #Xx> -Here xxPoints only Input
+
+<input #Xx="ngModel"> -Here xx points ngModel
+
+ <div class="form-group">
+         <label for="title">Title</label>
+         <input [(ngModel)]="post.title" name="title" #errorMsg1="ngModel" type="text" class="form-control" id="title" required>
+       </div>
+       <div [hidden]="errorMsg1.valid || errorMsg1.pristine" class="alert alert-danger">
+         title is required
+       </div>
+       <div class="form-group">
+         <label for="name">Name</label>
+         <input [(ngModel)]="post.author"  #errorMsg2="ngModel" name="author" type="text" class="form-control" id="name" required>
+       </div>
+       <div [hidden]="errorMsg2.valid || errorMsg2.pristine" class="alert alert-danger">
+         Author is required
+       </div>
+*******************************************************************************************
+
+Disabling submit button in case any validation fails:
+
+  <button type="submit" class="btn btn-success" [disabled]="!postForm.form.valid">Submit</button>
+
+*******************************************************************************************
+Select control and how to populate data.
+
+
+<div class="container">
+   <h1>Form Application : Post Registration Form</h1>
+   <div [hidden]="submitted">
+    <form #postForm="ngForm" (ngSubmit)="onSubmit()">
+       <!--TODO: Remove this once testing over-->
+       <pre>{{post | json}}</pre>
+      <div class="form-group">
+         <label for="title">Title</label>
+         <input [(ngModel)]="post.title" name="title" #errorMsg1="ngModel" type="text" class="form-control" id="title" required>
+       </div>
+       <div [hidden]="errorMsg1.valid || errorMsg1.pristine" class="alert alert-danger">
+         title is required
+       </div>
+       <div class="form-group">
+         <label for="name">Name</label>
+         <input [(ngModel)]="post.author"  #errorMsg2="ngModel" name="author" type="text" class="form-control" id="name" required>
+       </div>
+       <div [hidden]="errorMsg2.valid || errorMsg2.pristine" class="alert alert-danger">
+         Author is required
+       </div>
+
+       <div class="form-group">
+         <label for="category">Category</label>
+         <select class="form-control" id="category" name="category" 
+         required [(ngModel)]="post.category">
+           <option *ngFor="let cat of categories"  [value]="cat">
+             {{cat}}
+           </option>
+         </select>
+       </div>
+
+       <button type="submit" class="btn btn-success" [disabled]="!postForm.form.valid">Submit</button>    </form>
+    </div>
+<!--Details Page-->
+<div class="container" [hidden]="!submitted">
+   <h2>You submitted the following:</h2>
+   <div class="row">
+     <div class="col-xs-3">Id : </div>
+     <div class="col-xs-9  pull-left">{{ post.id }}</div>
+   </div>
+   <div class="row">
+     <div class="col-xs-3">Title : </div>
+     <div class="col-xs-9  pull-left">{{ post.title }}</div>
+   </div>
+   <div class="row">
+     <div class="col-xs-3">Author : </div>
+     <div class="col-xs-9 pull-left">{{ post.author }}</div>
+   </div>
+   <div class="row">
+      <div class="col-xs-3">Category : </div>
+      <div class="col-xs-9 pull-left">{{ post.category }}</div>
+    </div>
+   <br>
+   <button class="btn btn-primary" (click)="submitted=false">GoBack</button>
+ </div>
+    
+
+</div>
+
+import { Component } from '@angular/core';
+import { PostType } from './types/post.type';
+import { PostFormModel } from './formmodels/post.form.model';
+
+
+
+@Component({
+    selector:'app-root',
+    templateUrl :'app.component.html'
+})
+export class AppComponent{
+ post:any
+ submitted: boolean = false;
+ categories:Array<string> = ["User interface","MicroServices","Devops"];
+   constructor(){
+    this.post = new PostFormModel(Math.random(), 'Learn Angular', 'Misko',this.categories[0]);
+  }
+  onSubmit(){
+    console.log(this.post);
+    this.submitted = true;
+  }
+}
+................................
+More Eg:
+import { Component } from '@angular/core';
+import { PostFormModel } from './PostFormModel';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  model = { name: '', email: '' };  // Define the model
+
+  onSubmit(form: any) {
+    console.log('Form Submitted!', form);
+    console.log(this.model);
+  }
+}
+<form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)">
+    <div>
+      <label for="name">Name:</label>
+      <input id="name" name="name" [(ngModel)]="model.name" #name="ngModel" required />
+      <div *ngIf="name.invalid && name.touched" class="error">
+        Name is required!
+      </div>
+    </div>
+  
+    <div>
+      <label for="email">Email:</label>
+      <input id="email" name="email" [(ngModel)]="model.email" #email="ngModel" required email />
+      <div *ngIf="email.invalid && email.touched" class="error">
+        <div *ngIf="email.errors?.['required']">Email is required!</div>
+        <div *ngIf="email.errors?.['email']">Enter a valid email!</div>
+      </div>
+    </div>
+  
+    <div>
+      <button type="submit" [disabled]="myForm.invalid">Submit</button>
+    </div>
+  </form>
+  
+Explanation:
+ngForm: The form directive that makes the form available for validation and submission.
+ngModel: Binds the form controls to the component's model.
+required: A built-in validator for mandatory fields.
+email: A built-in validator to check if the input is a valid email.
+Touched and Invalid: These properties are used to check if the form control has been touched and if it’s invalid.
+Form Submission: The form is submitted when the user clicks the "Submit" button. The form is only submitted if it’s valid.
+Step 4: Add Some Styling (Optional)
+css
+Copy code
+.error {
+  color: red;
+  font-size: 12px;
+}
+Key Points:
+Validation: We used Angular's built-in validation like required, email, and checked for errors with name.errors?.['required'].
+Form Controls: The form controls are bound to the component's model using [(ngModel)].
+Form Submission: The form is only submitted if all fields are valid. The submit button is disabled until the form is valid.
+This example demonstrates the usage of template-driven forms with basic validation. You can further extend this with custom validators or more advanced form controls as needed.

@@ -1,0 +1,10 @@
+<div>
+    <!-- $event is just variable which points EventObject in js -->
+    <input (input)="onSave($event)" />
+    <h1>{{message}}</h1>
+
+    <div>
+        <input [(ngModel)]="name" />
+        <h1>{{name}}</h1>
+    </div>
+</div>

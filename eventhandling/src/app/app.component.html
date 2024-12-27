@@ -1,0 +1,22 @@
+<form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)">
+    <div>
+        <label for="name">Name:</label>
+        <input id="name" name="name" [(ngModel)]="model.name" #name="ngModel" required />
+        <div *ngIf="name.invalid && name.touched" class="error">
+            Name is required!
+        </div>
+    </div>
+
+    <div>
+        <label for="email">Email:</label>
+        <input id="email" name="email" [(ngModel)]="model.email" #email="ngModel" required email />
+        <div *ngIf="email.invalid && email.touched" class="error">
+            <div *ngIf="email.errors?.['required']">Email is required!</div>
+            <div *ngIf="email.errors?.['email']">Enter a valid email!</div>
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" [disabled]="myForm.invalid">Submit</button>
+    </div>
+</form>

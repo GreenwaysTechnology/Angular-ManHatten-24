@@ -1,0 +1,25 @@
+<div class="container">
+    <!--TODO: Remove this once testing over-->
+    <pre>{{post | json}}</pre>
+    <h1>Post Form</h1>
+    <form #postForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" [(ngModel)]="post.title" name="title" #errorMsg1="ngModel" class="form-control"
+                id="title" required>
+        </div>
+        <div [hidden]="errorMsg1.valid || errorMsg1.pristine" class="alert alert-danger">
+            title is required
+        </div>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" [(ngModel)]="post.author" #errorMsg2="ngModel" name="author" class="form-control"
+                id="name" required>
+        </div>
+        <div [hidden]="errorMsg2.valid || errorMsg2.pristine" class="alert alert-danger">
+            Author is required
+        </div>
+        <button type="submit" class="btn btn-success" [disabled]="!postForm.form.valid">Submit</button>
+
+    </form>
+</div>
