@@ -1,0 +1,1015 @@
+				Angular Services  
+..............................................................................................
+Angular is MVC framework, it has service layer.
+service layer is object having biz logic.
+
+Types of services
+1.sync service
+2.async service
+
+async service implementations
+1.callbacks
+2.Promise
+3.Promise with async await
+4.Rxjs 
+
+ng new services
+
+Users -sync:
+import { Component } from "@angular/core";
+import { UsersService } from "./users.service";
+import { User } from "./users.type";
+
+@Component({
+    selector: 'app-users',
+    templateUrl: 'users.component.html',
+})
+export class UserComponent {
+    //this variable is used to transfer data from controller to UI
+    users!: Array<User>
+    constructor(private userservice: UsersService) { 
+        this.users = this.userservice.findAll()
+    }
+
+
+}
+<div>
+    <h1>Users</h1>
+    <ul>
+        <li *ngFor="let user of users">
+            <span>{{user.name}}</span>
+        </li>
+    </ul>
+</div>
+import { NgModule } from "@angular/core";
+import { UserComponent } from "./user.component";
+import { CommonModule } from "@angular/common";
+import { UsersService } from "./users.service";
+
+@NgModule({
+    imports: [CommonModule],
+    declarations: [UserComponent],
+    providers: [UsersService],
+    exports: [UserComponent]
+})
+export default class UsersModule {
+
+}
+....
+app
+<div>
+    <app-users></app-users>
+</div>
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppComponent } from './app.component';
+import UsersModule from './users/users.module';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,UsersModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+..........................................................................................
+			 Async Services
+
+1.Using callbacks
+import { Injectable } from "@angular/core";
+import { USERS } from "./users.mock";
+import { User } from "./users.type";
+
+@Injectable()
+export class UsersService {
+    constructor() { }
+    //async pattern: callbacks
+    findAll(resolve: any, reject: any) {
+        setTimeout(resolve, 5000, USERS)
+    }
+}
+import { Component } from "@angular/core";
+import { UsersService } from "./users.service";
+import { User } from "./users.type";
+
+@Component({
+    selector: 'app-users',
+    templateUrl: 'users.component.html',
+})
+export class UserComponent {
+    //this variable is used to transfer data from controller to UI
+    users!: Array<User>
+    constructor(private userservice: UsersService) {
+        //async
+        this.userservice.findAll((users: User[]) => {
+            this.users = users
+        }, (err: any) => {
+            console.log(err)
+        })
+    }
+}
+.....................................................................................
+				Promise
+import { Injectable } from "@angular/core";
+import { USERS } from "./users.mock";
+import { User } from "./users.type";
+
+@Injectable()
+export class UsersService {
+    constructor() { }
+    findAll(): Promise<User[]> {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, 5000, USERS)
+        })
+    }
+}
+import { Component } from "@angular/core";
+import { UsersService } from "./users.service";
+import { User } from "./users.type";
+
+@Component({
+    selector: 'app-users',
+    templateUrl: 'users.component.html',
+})
+export class UserComponent {
+    //this variable is used to transfer data from controller to UI
+    users!: Array<User>
+    constructor(private userService: UsersService) {
+        //then and catch
+        this.userService.findAll().then(users => {
+            this.users = users 
+         }).catch(err => {
+            console.log(err)
+        })
+    }
+
+}
+.........................................................................................
+				async .... await
+
+import { Component } from "@angular/core";
+import { UsersService } from "./users.service";
+import { User } from "./users.type";
+
+@Component({
+    selector: 'app-users',
+    templateUrl: 'users.component.html',
+})
+export class UserComponent {
+    //this variable is used to transfer data from controller to UI
+    users!: Array<User>
+
+    constructor(private userService: UsersService) {
+        this.fetchUsers()
+    }
+    private async fetchUsers() {
+        try {
+            //   const users = await this.userService.findAll()
+            this.users = await this.userService.findAll()
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+}
+.............................................................................................
+
+			 Data Initalization 
+
+Any user interface apps
+   initialize the data when page is loaded - initial render
+   Once the user starts interaction, that time is also data is loaded- rerender...
+
+Angular loads the data for initial render inside
+
+=>constructor
+   - place where you can initialize the data.
+  This is not recommended, which impacts the performance of loading application
+ constructors are only used for dependency injection.
+
+
+Where to initialize the data?
+
+Angular provides special methods called "Component Life cycle methods".
+
+1. Creation Phase
+
+ngOnChanges(changes: SimpleChanges)
+
+Called before ngOnInit and whenever one or more data-bound input properties change.
+
+Use Case: React to changes in input properties.
+
+ngOnInit()
+
+Called once after the component's or directive's initialization.
+Use Case: Perform initialization logic, like fetching initial data.
+
+ngOnInit() {
+  console.log('Component initialized');
+}
+..............................................................
+2. Change Detection Phase (Update) : When user interacts :rerendering
+
+ngDoCheck()
+Called during every change detection cycle.
+Use Case: Manually detect and act upon changes that Angular might not detect.
+
+ngDoCheck() {
+  console.log('Change detection running');
+}
+
+3. Content Projection Phase
+ngAfterContentInit()
+
+Called once after the component's content (projected using <ng-content>) is initialized.
+Use Case: Access and act upon projected content.
+
+ngAfterContentInit() {
+  console.log('Projected content initialized');
+}
+ngAfterContentChecked()
+
+Called after every check of the component's projected content.
+Use Case: Respond to changes in the projected content.
+
+Example:
+
+ngAfterContentChecked() {
+  console.log('Projected content checked');
+}
+
+4. View Initialization Phase
+
+ngAfterViewInit()
+
+Called once after the component's view (and its child views) has been initialized.
+Use Case: Access and interact with the component's view and child components.
+
+Example:
+
+ngAfterViewInit() {
+  console.log('View initialized');
+}
+ngAfterViewChecked()
+
+Called after every check of the component's view (and its child views).
+Use Case: Respond to changes in the component's view.
+
+ngAfterViewChecked() {
+  console.log('View checked');
+}
+
+5. Destruction Phase
+
+ngOnDestroy()
+Called just before the component or directive is destroyed.
+Use Case: Cleanup tasks like unsubscribing from observables or detaching event handlers.
+
+Example:
+
+ngOnDestroy() {
+  console.log('Component destroyed');
+}
+
+Lifecycle Hook Order
+
+The order of execution for these hooks in a component's lifecycle is as follows:
+
+ngOnChanges()
+ngOnInit()
+ngDoCheck()
+ngAfterContentInit()
+ngAfterContentChecked()
+ngAfterViewInit()
+ngAfterViewChecked()
+ngOnDestroy()
+
+...........................................................................................
+			  Advanced Async Programing using RXJS
+
+What is Reactive Programming?
+ An API for asynchronous programming with observable streams
+
+Reactive Programming is not new approach to write modern apps, but it is old, collective ideas in one place.
+
+Reactive Programming concepts
+
+1.Async programming
+2.Data Streaming
+3.Event driven Programming  
+
+ Rx = {async,data streaming,event driven Programming}
+
+Reactive programming is similar design patterns , we need implementation.
+
+Every programming language has "extension" with Reactive - ReactiveX
+
+Java:
+   -Rxjava
+   -Project Reactor
+   -Mutiny
+Js:
+   -RXJS
+
+Angular uses rxjs internally for building advanced stream based async, event driven programming model
+
+Reactive Programming has been implemented with three major principles
+
+1.Observable Design Pattern -  Event Driven programming
+2.functional programming principles - enables declarative programming.
+3.iterator design pattern - push based iterator.
+.............................................................................................
+Core concepts:
+
+1.Publisher
+   Publisher is object who publishes the data
+
+2.Subscriber
+  Subscriber is object who listens for the data
+
+
+Publisher---publish data-----|-----|----|-------Subscriber
+                              Stream
+                             |     |    |
+                         operator operator operator
+
+
+3.Operators
+   Operators are apis or methods or function which creates and process the stream.
+
+4.Stream
+    flow of data
+....................................................................................
+				Angular and rx js
+1.Service is Publisher
+2.Component is Subscriber or Listener
+
+
+Objects:
+
+Observable: represents the idea of an invokable collection of future values or events.
+Observer: is a collection of callbacks that knows how to listen to values delivered by the Observable.
+Subscription: represents the execution of an Observable, is primarily useful for cancelling the execution.
+Operators: are pure functions that enable a functional programming style of dealing with collections with operations like map, filter, concat, reduce, etc.
+
+Subject: is equivalent to an EventEmitter, and the only way of multicasting a value or event to multiple Observers.
+
+Schedulers: are centralized dispatchers to control concurrency, allowing us to coordinate when 
+computation happens on e.g. setTimeout or requestAnimationFrame or others.
+.....................................................................................
+
+What value we can stream?
+  Stream any value including primitives,arrays,collections,promises.....
+
+Steps:
+1.create Stream
+   -From scratch
+	
+   -Using operators
+
+Any stream can emit three types of event
+
+1.data event - emits data
+2.error event - emits error
+3.complete event - emits complete
+........................................................................................
+
+How to emit event from scratch?
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+
+
+@Injectable({
+    providedIn: "root"
+})
+export class RxService {
+
+    public getValue(): Observable<number> {
+        return new Observable((subscriber) => {
+            //emit event
+            subscriber.next(1) // we emit data event
+            subscriber.next(2) // we emit data
+            subscriber.next(3) //we emit data
+            subscriber.complete() //close the stream
+        })
+    }
+}
+
+import { Component } from '@angular/core';
+import { RxService } from './rxservices/RxService.service';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'services';
+  constructor(private rxService: RxService) { }
+
+  ngOnInit() {
+    //listener : listens for event data,err,completed
+    this.rxService.getValue().subscribe({
+      next: (data) => {
+        console.log(data)
+      },
+      error: (err) => {
+        console.log(err)
+      },
+      complete: () => {
+        console.log('completed')
+      }
+    })
+  }
+}
+..................................................................................
+Using Operator how to create Stream:
+
+
+Of:
+
+import { Injectable } from "@angular/core";
+import { Observable, of } from "rxjs";
+
+
+@Injectable({
+    providedIn: "root"
+})
+export class RxService {
+
+    public getValue(): Observable<number> {
+        return of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    }
+}
+
+range:
+import { Injectable } from "@angular/core";
+import { Observable, of, range } from "rxjs";
+
+
+@Injectable({
+    providedIn: "root"
+})
+export class RxService {
+
+    public getValue(): Observable<number> {
+        return range(1,100)
+    }
+}
+
+from: Array
+...........
+import { Injectable } from "@angular/core";
+import { Observable, of, range, from } from "rxjs";
+
+
+@Injectable({
+    providedIn: "root"
+})
+export class RxService {
+    public getValue(): Observable<number> {
+        return from([1, 2, 34, 56])
+    }
+}
+............................................................................................
+			   Data Processing
+............................................................................................
+Transformation:
+import { Injectable } from "@angular/core";
+import { Observable, of, range, from, map } from "rxjs";
+
+
+@Injectable({
+    providedIn: "root"
+})
+export class RxService {
+
+    public getValue(): Observable<number> {
+        //double this 
+        return of(1, 2, 3, 4, 5).pipe(
+            map(value => value * 2)
+        )
+    }
+}
+
+Filtering:
+.........
+import { Injectable } from "@angular/core";
+import { Observable, of, range, from, map, filter, first } from "rxjs";
+
+
+@Injectable({
+    providedIn: "root"
+})
+export class RxService {
+
+      public getValue(): Observable<number> {
+        //double this 
+        return range(1, 100).pipe(
+            filter(value => value % 2 == 0),
+            first()
+        )
+    }
+}
+...........................
+// 3. Debouncing User Input
+import { fromEvent } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
+
+const input = document.getElementById('searchBox');
+
+fromEvent(input, 'input').pipe(
+  map((event) => event.target.value),
+  debounceTime(300)
+).subscribe((value) => console.log(value));
+
+// 4. Handling HTTP Requests (With switchMap)
+import { fromEvent } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators';
+import { ajax } from 'rxjs/ajax';
+
+const searchBox = document.getElementById('searchBox');
+
+fromEvent(searchBox, 'input').pipe(
+  debounceTime(300),
+  map((event) => event.target.value),
+  switchMap((query) => ajax.getJSON(`https://api.example.com/search?q=${query}`))
+).subscribe((response) => console.log(response));
+
+// 5. Combining Streams (merge, combineLatest)
+import { of, combineLatest } from 'rxjs';
+
+const stream1 = of('Stream 1 Value');
+const stream2 = of('Stream 2 Value');
+
+combineLatest([stream1, stream2]).subscribe(([value1, value2]) => {
+  console.log(`Combined: ${value1} & ${value2}`);
+});
+
+// 6. Error Handling with catchError
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { ajax } from 'rxjs/ajax';
+
+ajax('https://api.nonexistenturl.com/data').pipe(
+  catchError((error) => {
+    console.error('Error:', error);
+    return of('Fallback data');
+  })
+).subscribe((data) => console.log(data));
+
+RxJS Subject Types
+RxJS provides Subjects, which act as both Observables and Observers. They are crucial for multicasting (broadcasting values to multiple subscribers) and are widely used for handling event streams, data sharing, or state management.
+
+1. Subject
+- A basic Subject allows multicasting to multiple observers.
+
+- Subscribers receive future values emitted after they subscribe.
+
+Example:
+
+import { Subject } from 'rxjs';
+
+const subject = new Subject();
+
+// Subscriber 1
+subject.subscribe((value) => console.log('Subscriber 1:', value));
+
+// Emit values
+subject.next(1);
+subject.next(2);
+
+// Subscriber 2 (only receives values emitted after subscription)
+subject.subscribe((value) => console.log('Subscriber 2:', value));
+
+subject.next(3);
+
+**Output:**
+
+Subscriber 1: 1
+Subscriber 1: 2
+Subscriber 1: 3
+Subscriber 2: 3
+
+2. BehaviorSubject
+
+- Requires an initial value.
+- Emits the most recent value to new subscribers, even if they subscribe after a value has been emitted.
+Example:
+
+import { BehaviorSubject } from 'rxjs';
+
+const behaviorSubject = new BehaviorSubject(0); // Initial value
+
+// Subscriber 1
+behaviorSubject.subscribe((value) => console.log('Subscriber 1:', value));
+
+// Emit values
+behaviorSubject.next(1);
+behaviorSubject.next(2);
+
+// Subscriber 2 (gets the most recent value)
+behaviorSubject.subscribe((value) => console.log('Subscriber 2:', value));
+
+behaviorSubject.next(3);
+
+**Output:**
+
+Subscriber 1: 0
+Subscriber 1: 1
+Subscriber 1: 2
+Subscriber 2: 2
+Subscriber 1: 3
+Subscriber 2: 3
+
+3. ReplaySubject
+- Replays a specified number of previous values to new subscribers.
+- Useful when you want late subscribers to catch up with previous events.
+Example:
+
+import { ReplaySubject } from 'rxjs';
+
+const replaySubject = new ReplaySubject(2); // Replay last 2 values
+
+// Emit values
+replaySubject.next(1);
+replaySubject.next(2);
+replaySubject.next(3);
+
+// Subscriber 1 (receives last 2 emitted values)
+replaySubject.subscribe((value) => console.log('Subscriber 1:', value));
+
+replaySubject.next(4);
+
+**Output:**
+
+Subscriber 1: 2
+Subscriber 1: 3
+Subscriber 1: 4
+
+4. AsyncSubject
+- Emits the last value to subscribers only when it completes.
+- Commonly used for operations that produce a single result, like HTTP calls.
+Example:
+
+import { AsyncSubject } from 'rxjs';
+
+const asyncSubject = new AsyncSubject();
+
+// Subscriber 1
+asyncSubject.subscribe((value) => console.log('Subscriber 1:', value));
+
+// Emit values
+asyncSubject.next(1);
+asyncSubject.next(2);
+asyncSubject.next(3);
+
+asyncSubject.complete(); // Emits the last value (3) and completes
+
+**Output:**
+
+Subscriber 1: 3
+
+Comparison of Subject Types
+Subject Type	Initial Value	Replays Values	Emits Last Value on Complete
+Subject	No	No	No
+BehaviorSubject	Yes	No	No
+ReplaySubject	No	Yes	No
+AsyncSubject	No	No	Yes
+.............................................................................................
+			   AJAX Calls Angular 
+............................................................................................
+HTTP client:
+...........
+HttpClientModule
+   
+Steps:
+1.create module and inject HttpClientModule
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { HttpClientModule } from '@angular/common/http';
+@NgModule({
+    imports: [CommonModule, HttpClientModule],
+    declarations: []
+})
+export class PostModule {
+
+}
+
+2.Inject PostModule into Main Module
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppComponent } from './app.component';
+import UsersModule from './users/users.module';
+import { PostModule } from './posts/post.module';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,UsersModule,PostModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+2.Create Service layer
+import { Injectable } from "@angular/core";
+
+@Injectable({
+    providedIn: 'root'
+})
+export class PostService {
+
+}
+Step 3: Component
+import { Component } from "@angular/core";
+
+
+@Component({
+    selector: 'app-post',
+    templateUrl: 'post.component.html'
+})
+export class PostComponent {
+    constructor() { }
+    ngOnInit() { }
+}
+<div>
+    <h1>Posts</h1>
+</div>
+
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { HttpClientModule } from '@angular/common/http';
+import { PostComponent } from "./post.component";
+@NgModule({
+    imports: [CommonModule, HttpClientModule],
+    declarations: [PostComponent]
+})
+export class PostModule {
+
+}
+
+Full Code:
+You'll need the `HttpClientModule` for making HTTP requests. Install and import it in your `app.module.ts`:
+```typescript
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule, HttpClientModule],
+  providers: [],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+3. Create Service for API Calls
+Generate a service to handle HTTP requests:
+```bash
+ng generate service api
+```In `api.service.ts`, add methods for CRUD operations using `HttpClient`:
+```typescript
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ApiService {
+  private apiUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+  constructor(private http: HttpClient) {}
+
+  // Create
+  createPost(post: any): Observable<any> {
+    return this.http.post(this.apiUrl, post);
+  }
+
+  // Read
+  getPosts(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
+  // Update
+  updatePost(post: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${post.id}`, post);
+  }
+
+  // Delete
+  deletePost(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+}
+```
+4. Create CRUD Form in Component
+In `app.component.ts`, use the `ApiService` to implement the CRUD logic and a simple form for adding and updating posts.
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from './ApiService.service';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+})
+export class AppComponent implements OnInit {
+  posts: any[] = [];
+  postForm: any = { title: '', body: '' };
+  selectedPost: any = null;
+
+  constructor(private apiService: ApiService) { }
+
+  ngOnInit(): void {
+    this.loadPosts(); // Load posts when the component initializes
+  }
+
+  // Fetch posts from the API
+  loadPosts() {
+    this.apiService.getPosts().subscribe((data) => {
+      this.posts = data; // Set the posts data from API response
+    });
+  }
+
+  // Add a new post via the API
+  addPost() {
+    if (this.postForm.title && this.postForm.body) {
+      this.apiService.createPost(this.postForm).subscribe((newPost) => {
+        this.posts.push(newPost); // Add the new post to the list
+        this.resetForm(); // Reset the form after adding
+      });
+    }
+  }
+
+  // Update an existing post via the API
+  updatePost() {
+    if (this.selectedPost && this.selectedPost.id) {
+      console.log('inside update post', this.postForm)
+      this.apiService.updatePost(this.postForm).subscribe((data) => {
+        // Find the index of the post being updated
+        const index = this.posts.findIndex(post => post.id === this.postForm.id);
+        if (index !== -1) {
+          // Replace the old post with the updated post
+          this.posts[index] = { ...this.postForm };
+        }
+        this.resetForm(); // Reset the form after updating
+      });
+    }
+  }
+
+  // Select a post to edit and populate the form
+  selectPost(post: any) {
+    this.selectedPost = { ...post };
+    this.postForm = { ...post, title: post.title, body: post.body }; // Set form fields to selected post
+  }
+
+  // Delete a post via the API
+  deletePost(id: number) {
+    this.apiService.deletePost(id).subscribe(() => {
+      this.posts = this.posts.filter((post) => post.id !== id); // Remove the deleted post from the list
+    });
+  }
+
+  // Reset the form and selected post
+  resetForm() {
+    this.selectedPost = null;
+    this.postForm = { title: '', body: '' };
+  }
+}
+
+```
+5. Create the HTML UI
+In `app.component.html`, create the form and display the data in a table:
+```html
+<div>
+  <h2>CRUD Operations with Angular 15 and JSONPlaceholder</h2>
+
+  <div>
+    <h3>Add or Update Post</h3>
+    <form (ngSubmit)="selectedPost ? updatePost() : addPost()">
+      <label>Title:</label>
+      <input type="text" [(ngModel)]="postForm.title" name="title" required />
+      <label>Body:</label>
+      <textarea [(ngModel)]="postForm.body" name="body" required></textarea>
+      <button type="submit">{{ selectedPost ? "Update" : "Add" }} Post</button>
+    </form>
+  </div>
+
+  <div>
+    <h3>Posts List</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Body</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let post of posts">
+          <td>{{ post.title }}</td>
+          <td>{{ post.body }}</td>
+          <td>
+            <button (click)="selectPost(post)">Edit</button>
+            <button (click)="deletePost(post.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+```
+........
+
+Adding Error Handler:
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ApiService {
+  private apiUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+  constructor(private http: HttpClient) {}
+
+  // Create a new post
+  createPost(post: any): Observable<any> {
+    return this.http.post(this.apiUrl, post).pipe(
+      catchError(this.handleError) // Handle error
+    );
+  }
+
+  // Get all posts
+  getPosts(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl).pipe(
+      catchError(this.handleError) // Handle error
+    );
+  }
+
+  // Update a post
+  updatePost(post: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${post.id}`, post).pipe(
+      catchError(this.handleError) // Handle error
+    );
+  }
+
+  // Delete a post
+  deletePost(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+      catchError(this.handleError) // Handle error
+    );
+  }
+
+  // Handle errors
+  private handleError(error: any) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage)); // Return a user-friendly error
+  }
+}
+
+.......................
+
+Adding Type:
+export interface Post {
+  id: number;
+  title: string;
+  body: string;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

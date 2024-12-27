@@ -1,0 +1,36 @@
+<!-- Form for adding post and also update -->
+<div>
+    <div>
+        <h3>Add or Update Post</h3>
+        <form (ngSubmit)="selectedPost ? updatePost() : addPost()">
+            <label>Title:</label>
+            <input type="text" [(ngModel)]="postForm.title" name="title" required />
+            <label>Body:</label>
+            <textarea [(ngModel)]="postForm.body" name="body" required></textarea>
+            <button type="submit">{{ selectedPost ? "Update" : "Add" }} Post</button>
+        </form>
+    </div>
+    <hr />
+    <div>
+        <h3>Posts List</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Body</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let post of posts">
+                    <td>{{ post.title }}</td>
+                    <td>{{post.body}}</td>
+                    <td>
+                        <button (click)="selectPost(post)">Edit</button>
+                        <button (click)="deletePost(post.id)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
