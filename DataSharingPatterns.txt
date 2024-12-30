@@ -3,7 +3,6 @@
 Types of data sharing pattern
 
 1.Property Binding
-
 2.Event Emitter binding
 3.Global data sharing
 
@@ -417,3 +416,153 @@ container -app.component.html
       <h4>Footer goes</h4>
     </footer>
   </app-page>
+...........................................................................................
+				Event Emitter
+...........................................................................................
+
+How to send data from child to parent.
+
+Steps:
+1.create child component
+ 
+In order to send data from the child to parent, we have to use "custom events"
+
+import { Component, EventEmitter, Output } from '@angular/core';
+import { Hero } from './hero.type';
+
+@Component({
+  selector: 'app-heroform',
+  templateUrl: './heroform.component.html',
+  styleUrls: ['./heroform.component.css']
+})
+export class HeroformComponent {
+
+  //declare custom event
+  @Output() //We send event outside(to the immediate parent)
+  onHeroSendRequest = new EventEmitter<Hero>()
+}
+
+Sending data From the child:
+...........................
+ Now hardcoded data we are sending.
+import { Component, EventEmitter, Output } from '@angular/core';
+import { Hero } from './hero.type';
+
+@Component({
+  selector: 'app-heroform',
+  templateUrl: './heroform.component.html',
+  styleUrls: ['./heroform.component.css']
+})
+export class HeroformComponent {
+
+  //declare custom event
+  @Output() //We send event outside(to the immediate parent)
+  onHeroSendRequest = new EventEmitter<Hero>()
+
+  //listener
+  sendHero() {
+    let newHero = {
+      id: 7,
+      name: 'Test'
+    }
+  }
+
+}
+<div>
+    <button (click)="sendHero()">SendHeroToParent</button>
+</div>
+
+sending data to parent
+import { Component, EventEmitter, Output } from '@angular/core';
+import { Hero } from './hero.type';
+
+@Component({
+  selector: 'app-heroform',
+  templateUrl: './heroform.component.html',
+  styleUrls: ['./heroform.component.css']
+})
+export class HeroformComponent {
+
+  //declare custom event
+  @Output() //We send event outside(to the immediate parent)
+  onHeroSendRequest = new EventEmitter<Hero>()
+
+  //listener
+  sendHero() {
+    let newHero = {
+      id: 7,
+      name: 'Test'
+    }
+    //how to send it
+    this.onHeroSendRequest.emit(newHero)
+  }
+
+}
+
+Parent Component Template:
+...........................
+We have to listen for child events.
+
+heroes.component.html
+<div>
+   <h2>Parent Component</h2>
+    <app-heroesdetails title="Heroes Details" [heroes]="heroes"></app-heroesdetails>
+    {{hero | json}}
+    <h3>Child Component</h3>
+    <app-heroform (onHeroSendRequest)="save($event)"></app-heroform>
+</div>
+
+heroes.component.ts
+import { Component } from '@angular/core';
+import { HeroesService } from './heores.service';
+import { Hero } from './hero.type';
+
+@Component({
+  selector: 'app-heroes',
+  templateUrl: './heroes.component.html',
+  styleUrls: ['./heroes.component.css']
+})
+export class HeroesComponent {
+  heroes!: Array<Hero>
+  hero!: Hero
+  constructor(private heroesService: HeroesService) { }
+
+  ngOnInit() {
+    this.heroesService.findAll().subscribe({
+      next: (heroes) => {
+        this.heroes = heroes
+      }
+    })
+  }
+  save(hero: Hero) {
+    //http call to send to api
+    this.hero = hero
+    this.heroesService.save(hero).subscribe({
+      next: res => {
+        console.log(res)
+      }
+    })
+  }
+
+}
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Hero } from "./hero.type";
+
+@Injectable({
+    providedIn: 'root'
+})
+export class HeroesService {
+    apiUrl = 'http://localhost:3000/heroes'
+    constructor(private http: HttpClient) { }
+
+    findAll() {
+        return this.http.get<Hero[]>(this.apiUrl)
+    }
+    save(hero: Hero) {
+        console.log('post data')
+        return this.http.post<Hero>(this.apiUrl, hero)
+    }
+}
+
+

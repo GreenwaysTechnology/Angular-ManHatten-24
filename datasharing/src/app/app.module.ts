@@ -14,7 +14,7 @@ import { PageModule } from './page/page.module';
     BrowserModule,
     HeroesModule,
     TabModule,
-    PageModule
+    PageModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

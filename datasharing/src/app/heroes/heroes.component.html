@@ -5,5 +5,9 @@
         </li>
     </ul> -->
     <!-- [heroes]-This propertyName = "Property Value : can be any thing" -->
+    <h2>Parent Component</h2>
     <app-heroesdetails title="Heroes Details" [heroes]="heroes"></app-heroesdetails>
+    {{hero | json}}
+    <h3>Child Component</h3>
+    <app-heroform (onHeroSendRequest)="save($event)"></app-heroform>
 </div>

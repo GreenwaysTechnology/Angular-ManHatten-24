@@ -9,12 +9,22 @@ import { Hero } from './hero.type';
 })
 export class HeroesComponent {
   heroes!: Array<Hero>
+  hero!: Hero
   constructor(private heroesService: HeroesService) { }
 
   ngOnInit() {
     this.heroesService.findAll().subscribe({
       next: (heroes) => {
         this.heroes = heroes
+      }
+    })
+  }
+  save(hero: Hero) {
+    //http call to send to api
+    this.hero = hero
+    this.heroesService.save(hero).subscribe({
+      next: res => {
+        console.log(res)
       }
     })
   }
