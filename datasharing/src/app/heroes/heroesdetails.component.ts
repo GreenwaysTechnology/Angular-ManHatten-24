@@ -9,4 +9,6 @@ import { Hero } from './hero.type';
 export class HeroesdetailsComponent {
   @Input()
   heroes!: Array<Hero>
+  @Input()
+  title:string = ""
 }

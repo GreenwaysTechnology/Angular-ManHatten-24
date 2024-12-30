@@ -3,6 +3,7 @@
 Types of data sharing pattern
 
 1.Property Binding
+
 2.Event Emitter binding
 3.Global data sharing
 
@@ -190,17 +191,229 @@ http://localhost:3000/posts
 http://localhost:3000/comments
 http://localhost:3000/profile
 http://localhost:3000/heroes
+..........................................................................................
+				Content Projection
+...........................................................................................
 
-Task:
- create Grid component which should pass
-columns
-data
-as property
+How Component forms tree model?
+
+Parent-child:
+
+parent: app-component.html
+
+ <div>
+      <app-heroes></app-heroes>
+ </>
+
+Child : app.heroes.component.html
+  <!-- [heroes]-This propertyName = "Property Value : can be any thing" -->
+<app-heroesdetails [heroes]="heroes"></app-heroesdetails>
+
+child: app.hero.component.html
+<ul>
+    <li *ngFor="let hero of heroes">
+        <!-- <span>{{hero.name}}</span> -->
+         <app-heroe [hero]="hero"></app-heroe>      
+    </li>
+</ul>
+.........................................................................................
+
+What can be a prop?
+
+1.Data as Prop - string, array, object, number
+2.Component as Prop /HTML Elements as Prop
+
+Component As Prop/HTML element As Prop: Content Projection
+..........................................................
+
+Use case: 
+ 1.Creating container components such as Grid, Tab, Menu.
+
+syntax:
+ <app-heroes></app-heroes> 
+ or
+ <app-heroes/> - valid - Self closing : Meaning that , app-heroes has no child element
 
 eg:
- id, name as columns
- data = heroes
+  <div>  - parent element
+     <h1>Hello</h1> - child elemements
+  </div>
+  <img src="" /> here image has no child element.
 
-product information
- id name price qty  as columns
- data = product
+What if the component (custom element) is going to take child elements ?
+
+  <app-tab>
+      ? -here we can pass any element dom or custom element
+  </app-tab>  
+  -This is called as content projection.
+
+
+Write a Component which accepts other component or dom element as child
+
+Steps:
+1.create a module and components
+>ng g m tab --module=app
+>ng g c tab/tab --flat=true --export=true --skip-tests=true --module=tab
+
+2.Test : by passing simple html element
+
+app.component.html
+<div>
+  <h2>Content Projection</h2>
+  <app-tab>
+    <!-- Tab content -->
+     <div>
+         <h1>Tab Content</h1>
+     </div>
+  </app-tab>
+</div>
+
+With respect data we use @Input decorator is to read data as prop which is supplied from parent.
+
+What if , the component/dom element as prop
+
+<ng-content></ng-content>
+  It is place holder , in built angular component.
+
+eg:
+Tab
+
+app/tab/tab.component
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-tab',
+  templateUrl: './tab.component.html',
+  styleUrls: ['./tab.component.css']
+})
+export class TabComponent {
+
+}
+app/tab/tab.component.html
+<div>
+    <!-- Insert what ever we pass from parent component -->
+     <ng-content></ng-content>
+</div>
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TabComponent } from './tab.component';
+
+
+
+@NgModule({
+  declarations: [
+    TabComponent
+  ],
+  imports: [
+    CommonModule
+  ],
+  exports: [
+    TabComponent
+  ]
+})
+export class TabModule { }
+....
+
+Parent:
+ app.component.html
+<div>
+  <h1>Data Sharing Pattern</h1>
+  <!-- <app-heroes></app-heroes> -->
+  <h2>Content Projection</h2>
+  <app-tab>
+    <!-- Tab content -->
+    <div>
+      <h1>Tab Content</h1>
+    </div>
+  </app-tab>
+
+  <hr />
+  <app-tab>
+    <!-- Tab content -->
+    <ul>
+      <li>Home</li>
+      <li>Services</li>
+      <li>ContactUs</li>
+    </ul>
+  </app-tab>
+
+  <app-tab>
+    <!-- Pass component as prop -->
+    <app-heroes></app-heroes>
+  </app-tab>
+</div>
+.............................................................................................
+
+Multi-slot Content Projection:
+...............................
+
+In the above example we pass component/dom element as prop,  as single content.
+
+lets say i am going to create layout component /page component, which should accept header,body,footer as dynamic one.
+
+ page
+ ---------------------
+ |    header          |
+ |                    |
+ |    body    
+        
+ |    footer         |
+ ----------------------
+
+ here header,body,footer is slot
+ 
+eg:
+
+ng g m page --module=app
+ng g c page/page --flat=true --export=true --skip-tests=true --module=page
+
+In the child component(page)'s template , inside ng-content we have to add an attribute called
+"select" which value is unique identifier.
+
+eg:
+  <ng-content select="[variableName]"></ng-content>
+  <ng-content select="[header]"></ng-content>
+  <ng-content select="[body]"></ng-content>
+  <ng-content select="[footer]"></ng-content>
+
+eg:
+app.page.component
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-page',
+  templateUrl: './page.component.html',
+  styleUrls: ['./page.component.css']
+})
+export class PageComponent {
+
+}
+
+app.page.component.html
+<div>
+    <!-- Header -->
+    <ng-content select="[header]"></ng-content>
+    <!-- Body -->
+    <ng-content select="[body]"></ng-content>
+    <!-- Footer -->
+    <ng-content select="[footer]"></ng-content>
+</div>
+
+...
+container -app.component.html
+<!-- Multi slot  -->
+  <app-page>
+    <!-- Header -->
+    <header header>
+      <h2>Header goes</h2>
+    </header>
+    <!-- Body -->
+    <div body>
+      <p>body goes</p>
+    </div>
+    <!-- Footer -->
+    <footer footer>
+      <h4>Footer goes</h4>
+    </footer>
+  </app-page>
