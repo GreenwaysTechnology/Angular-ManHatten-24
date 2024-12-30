@@ -1,0 +1,668 @@
+				 Single Page App Development
+...............................................................................................
+Routing is a concept through which we can build an called Single Page Web App.
+
+We have lot of web apps
+
+1.static web app
+2.dynamic web app
+3.web services - soap,restfull
+4.SPA
+
+SPA core concepts:
+
+spa is built using "js,css,html5"
+
+js offers browser apis
+-location
+-history
+ objects are used to implement navigation
+
+if you want to build spa using frameworks like angular , angular offers a separate module called "RouterModule"
+
+1.page
+  1.physical page - html page/static - index.html
+  2.virtual page - the page created onfly and inserted into pysical page- components/views
+
+index.html
+
+ <body>
+    <app-root>
+    </app-root>
+ </body>
+
+without spa
+
+ <body>
+    <app-root>
+	 <app-users>
+    </app-root>
+ </body>
+
+with spa
+
+ <body>
+    <app-root>
+         <navigation>
+         <page>
+    </app-root>
+ </body>
+navigation would be html hyper links - menus
+page is component to be rendered based on menu item
+
+Steps:
+1.create an app with routing support
+ new new  routingApp
+   ? Would you like to add Angular routing? Yes
+
+Common Concepts in Routing:
+..........................
+
+Routing:
+Routing means Menus /routes
+Each Menu may have been associated with a feature like products,customers.
+
+Menus:
+ Master Menu
+ Nested Menu
+
+Routing is classified into two category
+
+1.master routing
+   routing and its configuration is part of root folder /root module
+ app.routing.module.ts
+
+2.child routing/feature routing
+
+ features sub folder and moudles
+
+ heroes
+  |
+  heroes.module.ts - heroes related components
+  heroes.routing.module.ts - heroes specific routing module 
+...........................................................................................
+
+Simple routing: Routing in root module/app module
+.................................................
+
+Step: 1:
+ create module
+ng g m greeter --module=app
+CREATE src/app/greeter/greeter.module.ts (193 bytes)
+UPDATE src/app/app.module.ts (469 bytes
+
+create components
+ng g c greeter/hai  --module=greeter --export=true --skip-tests=true --flat=true
+CREATE src/app/greeter/hai.component.html (18 bytes)
+CREATE src/app/greeter/hai.component.ts (190 bytes)
+CREATE src/app/greeter/hai.component.css (0 bytes)
+UPDATE src/app/greeter/greeter.module.ts (296 bytes)
+
+ng g c greeter/hello  --module=greeter --export=true --skip-tests=true --flat=true
+CREATE src/app/greeter/hello.component.html (20 bytes)
+CREATE src/app/greeter/hello.component.ts (198 bytes)
+CREATE src/app/greeter/hello.component.css (0 bytes)
+UPDATE src/app/greeter/greeter.module.ts (388 bytes)
+
+step 2:
+ Router configuration
+app.routing.module.ts
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HaiComponent } from './greeter/hai.component';
+import { HelloComponent } from './greeter/hello.component';
+
+const routes: Routes = [{
+  path: 'hai', component: HaiComponent
+},
+{
+  path: 'hello', component: HelloComponent
+}
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { GreeterModule } from './greeter/greeter.module';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    GreeterModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+app.component.html
+<div class="container">
+  <nav>
+    <ul>
+      <li>
+        <a routerLink="/hai">Hai</a>
+      </li>
+      <li>
+        <a routerLink="/hello">Hello</a>
+      </li>
+    </ul>
+  </nav>
+  <!-- Place Holder : which displays UI according to navigation -->
+   <router-outlet></router-outlet>
+</div>
+.............................................................................................
+			 Modularizing routing features
+.............................................................................................
+
+Feature Module with routing feature:
+
+ng g m heroes --module=app => this is without routing module
+
+ng g m heroes --routing --module=app
+
+>ng g m heroes --routing --module=app
+CREATE src/app/heroes/heroes-routing.module.ts (249 bytes)
+CREATE src/app/heroes/heroes.module.ts (280 bytes)
+UPDATE src/app/app.module.ts (542 bytes)
+
+ng g c heroes/heroes  --flat --skip-tests --export  --module=heroes
+CREATE src/app/heroes/heroes.component.html (21 bytes)
+CREATE src/app/heroes/heroes.component.ts (202 bytes)
+CREATE src/app/heroes/heroes.component.css (0 bytes)
+UPDATE src/app/heroes/heroes.module.ts (395 bytes)
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HeroesComponent } from './heroes.component';
+
+const routes: Routes = [{
+  path: 'heroes', component: HeroesComponent
+}];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class HeroesRoutingModule { }
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { HeroesRoutingModule } from './heroes-routing.module';
+import { HeroesComponent } from './heroes.component';
+
+
+@NgModule({
+  declarations: [
+    HeroesComponent
+  ],
+  imports: [
+    CommonModule,
+    HeroesRoutingModule
+  ],
+  exports: [
+    HeroesComponent
+  ]
+})
+export class HeroesModule { }
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { GreeterModule } from './greeter/greeter.module';
+import { HeroesModule } from './heroes/heroes.module';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    GreeterModule,
+    HeroesModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+app.component.html
+<div class="container">
+  <nav>
+    <ul>
+      <li>
+        <a routerLink="/hai">Hai</a>
+      </li>
+      <li>
+        <a routerLink="/hello">Hello</a>
+      </li>
+      <li>
+        <a routerLink="/heroes">Heroes</a>
+      </li>
+    </ul>
+  </nav>
+  <!-- Place Holder : which displays UI according to navigation -->
+   <router-outlet></router-outlet>
+</div>
+.........................................................................................
+		 Mapping feature module routing from app.routing module
+........................................................................................
+Lazy loading:
+.............
+ The angular app is bundled as a js file, and deployed in server
+ Client requests the app , the server will send the js file along index.html
+ browser downloads all js and static assets, if js bundle is bigger, it may slow down the app.
+
+ www.example.com ------------> server----->send app with js------browser-downloads all js file and start initializing and rendering
+
+ You are not going to use all app functionality in one go, then why should i download all js files.
+
+ in order to improve performance,server will send only necessary js, how?
+  The app is broken down into smaller and smaller js called junks, based on features
+ only send core js files to browser, on demand send the rest of js files - lazy loading.
+
+How to write lazy loaded modules?
+
+heroes.routing.module.ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HeroesComponent } from './heroes.component';
+
+const routes: Routes = [{
+  path: '', component: HeroesComponent
+}];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class HeroesRoutingModule { }
+
+app.routing.module.ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HaiComponent } from './greeter/hai.component';
+import { HelloComponent } from './greeter/hello.component';
+
+const routes: Routes = [{
+  path: 'hai', component: HaiComponent
+},
+{
+  path: 'hello', component: HelloComponent
+},
+{ path: 'heroes', loadChildren: () => import('./heroes/heroes.module').then(m => m.HeroesModule) }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+
+{ path: 'heroes', loadChildren: () => import('./heroes/heroes.module').then(m => m.HeroesModule) }
+   This enables lazy loading....
+....................................................................................
+			 Path Design -Routing patterns
+......................................................................................
+1.named route
+ {path:'name'}
+{
+  path: 'hai', component: HaiComponent
+}
+2.index route
+  As soon as web app is lanuched,we need to show some page
+{
+  path: '', component: HaiComponent
+}
+3.parametermized route
+  {path:'albums/:id'}
+4.NotFound Route
+5.Redirections /hello - /greet
+6.Nested routing
+
+
+Index Route:
+>ng g m home --module=app
+>ng g c home/home  --flat --skip-tests --export  --module=home
+CREATE src/app/home/home.component.html (19 bytes)
+CREATE src/app/home/home.component.ts (194 bytes)
+CREATE src/app/home/home.component.css (0 bytes)
+UPDATE src/app/home/home.module.ts (297 bytes)
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HaiComponent } from './greeter/hai.component';
+import { HelloComponent } from './greeter/hello.component';
+import { HomeComponent } from './home/home.component';
+
+const routes: Routes = [
+  {
+    path: '', component: HomeComponent
+  },
+  {
+    path: 'hai', component: HaiComponent
+  },
+  {
+    path: 'hello', component: HelloComponent
+  },
+  { path: 'heroes', loadChildren: () => import('./heroes/heroes.module').then(m => m.HeroesModule) }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+NotFound:
+........
+>ng g c notfound  --flat --skip-tests --export  --module=app
+CREATE src/app/notfound.component.html (23 bytes)
+CREATE src/app/notfound.component.ts (210 bytes)
+CREATE src/app/notfound.component.css (0 bytes)
+UPDATE src/app/app.module.ts (728 bytes)
+
+{ path: '**', component: NotfoundComponent }
+
+
+Redirections:
+  Having dummy urls 
+  for one component we can have many urls
+const routes: Routes = [
+  {
+    path: '', redirectTo: '/home', pathMatch: 'full'
+  },
+  {
+    path: 'home', component: HomeComponent
+  },
+  {
+    path: 'hai', component: HaiComponent
+  },
+  {
+    path: 'hello', component: HelloComponent
+  },
+  { path: 'heroes', loadChildren: () => import('./heroes/heroes.module').then(m => m.HeroesModule) },
+  { path: '**', component: NotfoundComponent }
+
+];
+............................................................................................
+			 Dynamic Path - Mater detail page
+...........................................................................................
+
+ng g c heroes/heroesdetails  --flat --skip-tests --export  --module=heroes
+CREATE src/app/heroes/heroesdetails.component.html (28 bytes)
+CREATE src/app/heroes/heroesdetails.component.ts (230 bytes)
+CREATE src/app/heroes/heroesdetails.component.css (0 bytes)
+UPDATE src/app/heroes/heroes.module.ts (519 bytes)
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HeroesComponent } from './heroes.component';
+import { HeroesdetailsComponent } from './heroesdetails.component';
+
+const routes: Routes = [
+  {
+    path: '', component: HeroesComponent
+  },
+  {
+    path: 'details/:id', component: HeroesdetailsComponent
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class HeroesRoutingModule { }
+
+
+How to read Parameter send by master page?
+
+ActivatedRoute:
+  Object used to read parameters send by master.
+
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-heroesdetails',
+  templateUrl: './heroesdetails.component.html',
+  styleUrls: ['./heroesdetails.component.css']
+})
+export class HeroesdetailsComponent {
+  constructor(private activateRoute: ActivatedRoute) { }
+  ngOnInit() {
+    this.activateRoute.params.subscribe({
+      next: data => {
+        console.log(data)
+      }
+    })
+  }
+}
+...
+
+Building master details : full code:
+....................................
+HeroesComponent:
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-heroes',
+  templateUrl: './heroes.component.html',
+  styleUrls: ['./heroes.component.css']
+})
+export class HeroesComponent {
+  heroes: any[] = [
+    { id: 1, name: 'RubberMan' },
+    { id: 2, name: 'JamesBond' },
+    { id: 3, name: 'SpiderMan' },
+    { id: 4, name: 'SuperMan' },
+    { id: 5, name: 'WonderWoman' },
+
+  ]
+}
+<ul>
+    <li *ngFor="let hero of heroes">
+        <a [routerLink]="['/heroes/details',hero.id]">
+            <span>{{hero.name}}</span>
+        </a>
+    </li>
+</ul>
+
+
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-heroesdetails',
+  templateUrl: './heroesdetails.component.html',
+  styleUrls: ['./heroesdetails.component.css']
+})
+export class HeroesdetailsComponent {
+  hero!: any
+  constructor(private activateRoute: ActivatedRoute) { }
+  ngOnInit() {
+    this.activateRoute.params.subscribe({
+      next: data => {
+        console.log(data)
+        this.hero = data
+      }
+    })
+  }
+}
+<h1>{{hero.id}} -details </h1>
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HeroesComponent } from './heroes.component';
+import { HeroesdetailsComponent } from './heroesdetails.component';
+
+const routes: Routes = [
+  {
+    path: '', component: HeroesComponent
+  },
+  {
+    path: 'details/:id', component: HeroesdetailsComponent
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class HeroesRoutingModule { }
+.............................................................................................
+			  Nested Routing
+
+Main Menu
+  
+Sub Menu
+
+Syntax:
+  {
+    path: "products", component: ProductsComponent,
+    children: [
+      { path: '', redirectTo: '/products/books', pathMatch: 'full' },
+      { path: 'books', component: BooksComponent },
+      { path: 'electronics', component: PhonesComponent }
+    ]
+  }
+
+ng g m products --module=app
+
+ng g c products/products --flat --skip-tests --export  --module=products
+CREATE src/app/products/products.component.html (23 bytes)
+CREATE src/app/products/products.component.ts (210 bytes)
+CREATE src/app/products/products.component.css (0 bytes)
+UPDATE src/app/products/products.module.ts (317 bytes)
+
+products.comoent.html
+
+<h1>Products</h1>
+<ul>
+    <li>
+        <a routerLink="/products/books">Books</a>
+    </li>
+    <li>
+        <a routerLink="/products/electronics">Electronics</a>
+    </li>
+</ul>
+<hr />
+<router-outlet></router-outlet>
+
+products.module.ts
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ProductsComponent } from './products.component';
+import { BooksComponent } from './books.component';
+import { PhonesComponent } from './phones.component';
+import { AppRoutingModule } from '../app-routing.module';
+
+
+
+@NgModule({
+  declarations: [
+    ProductsComponent,
+    BooksComponent,
+    PhonesComponent
+  ],
+  imports: [
+    CommonModule,AppRoutingModule
+  ],
+  exports: [
+    ProductsComponent,
+    BooksComponent,
+    PhonesComponent
+  ]
+})
+export class ProductsModule { }
+
+
+app.routing.ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HaiComponent } from './greeter/hai.component';
+import { HelloComponent } from './greeter/hello.component';
+import { HomeComponent } from './home/home.component';
+import { NotfoundComponent } from './notfound.component';
+import { ProductsComponent } from './products/products.component';
+import { BooksComponent } from './products/books.component';
+import { PhonesComponent } from './products/phones.component';
+
+const routes: Routes = [
+  {
+    path: '', redirectTo: '/home', pathMatch: 'full'
+  },
+  {
+    path: 'home', component: HomeComponent
+  },
+  {
+    path: 'hai', component: HaiComponent
+  },
+  {
+    path: 'hello', component: HelloComponent
+  },
+  {
+    path: 'products', component: ProductsComponent,
+    children: [
+      { path: '', redirectTo: '/products/books', pathMatch: 'full' },
+      { path: 'books', component: BooksComponent },
+      { path: 'electronics', component: PhonesComponent }
+    ]
+  },
+  { path: 'heroes', loadChildren: () => import('./heroes/heroes.module').then(m => m.HeroesModule) },
+  { path: '**', component: NotfoundComponent }
+
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+..............................................................................................
+				Programmatic Routing
+............................................................................................
+
+Without using hyper links, via coding if you want redirect
+
+ng g c dashboard --flat --skip-tests --export  --module=app
+
+Router Object:
+ It is built in object used to navigate to Other Routers
+
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
+})
+export class DashboardComponent {
+  constructor(private router: Router) { }
+  goToHeroes() {
+    //
+    this.router.navigate(['heroes'])
+  }
+  goToProducts() {
+    this.router.navigate(['products'])
+  }
+}
