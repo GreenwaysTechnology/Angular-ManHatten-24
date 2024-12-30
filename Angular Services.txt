@@ -180,7 +180,7 @@ export class UserComponent {
 }
 .............................................................................................
 
-			 Data Initalization 
+			 Data Initialization 
 
 Any user interface apps
    initialize the data when page is loaded - initial render
@@ -366,7 +366,7 @@ computation happens on e.g. setTimeout or requestAnimationFrame or others.
 .....................................................................................
 
 What value we can stream?
-  Stream any value including primitives,arrays,collections,promises.....
+  Stream any value including primitives, arrays, collections, promises.....
 
 Steps:
 1.create Stream
@@ -382,6 +382,7 @@ Any stream can emit three types of event
 ........................................................................................
 
 How to emit event from scratch?
+
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
@@ -566,6 +567,7 @@ ajax('https://api.nonexistenturl.com/data').pipe(
 ).subscribe((data) => console.log(data));
 
 RxJS Subject Types
+
 RxJS provides Subjects, which act as both Observables and Observers. They are crucial for multicasting (broadcasting values to multiple subscribers) and are widely used for handling event streams, data sharing, or state management.
 
 1. Subject
@@ -602,6 +604,7 @@ Subscriber 2: 3
 
 - Requires an initial value.
 - Emits the most recent value to new subscribers, even if they subscribe after a value has been emitted.
+
 Example:
 
 import { BehaviorSubject } from 'rxjs';
@@ -630,7 +633,9 @@ Subscriber 1: 3
 Subscriber 2: 3
 
 3. ReplaySubject
+
 - Replays a specified number of previous values to new subscribers.
+
 - Useful when you want late subscribers to catch up with previous events.
 Example:
 
@@ -655,6 +660,7 @@ Subscriber 1: 3
 Subscriber 1: 4
 
 4. AsyncSubject
+
 - Emits the last value to subscribers only when it completes.
 - Commonly used for operations that produce a single result, like HTTP calls.
 Example:
@@ -704,6 +710,7 @@ export class PostModule {
 }
 
 2.Inject PostModule into Main Module
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 

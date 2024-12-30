@@ -1,0 +1,206 @@
+				Data sharing Pattern			..............................................................................................
+
+Types of data sharing pattern
+
+1.Property Binding
+2.Event Emitter binding
+3.Global data sharing
+
+Property Binding:
+   As Per component driven principles, we break the ui into multiple components and we form the component into parent and child component. 
+  Sharing data from the parent component to child component.
+
+Why Property Pattern?
+
+1.Components can be created in loosely coupled pattern, so that component can take any configurable data.
+
+
+eg:
+heroes
+heroes.component
+import { Component } from '@angular/core';
+import { HeroesService } from './heores.service';
+import { Hero } from './hero.type';
+
+@Component({
+  selector: 'app-heroes',
+  templateUrl: './heroes.component.html',
+  styleUrls: ['./heroes.component.css']
+})
+export class HeroesComponent {
+  heroes!: Array<Hero>
+  constructor(private heroesService: HeroesService) { }
+
+  ngOnInit() {
+    this.heroesService.findAll().subscribe({
+      next: (heroes) => {
+        this.heroes = heroes
+      }
+    })
+  }
+
+}
+<div>
+    <!-- <ul>
+        <li *ngFor="let hero of heroes">
+             <span>{{hero.name}}</span>
+        </li>
+    </ul> -->
+    <!-- [heroes]-This propertyName = "Property Value : can be any thing" -->
+    <app-heroesdetails [heroes]="heroes"></app-heroesdetails>
+</div>
+
+heroes.details.component
+import { Component, Input } from '@angular/core';
+import { Hero } from './hero.type';
+
+@Component({
+  selector: 'app-heroesdetails',
+  templateUrl: './heroesdetails.component.html',
+  styleUrls: ['./heroesdetails.component.css']
+})
+export class HeroesdetailsComponent {
+  @Input()
+  heroes!: Array<Hero>
+}
+<ul>
+    <li *ngFor="let hero of heroes">
+        <!-- <span>{{hero.name}}</span> -->
+         <app-heroe [hero]="hero"></app-heroe>      
+    </li>
+</ul>
+
+hero.compoent
+import { Component, Input } from '@angular/core';
+import { Hero } from './hero.type';
+
+@Component({
+  selector: 'app-heroe',
+  templateUrl: './heroe.component.html',
+  styleUrls: ['./heroe.component.css']
+})
+export class HeroeComponent {
+  @Input()
+  hero!: Hero
+}
+<span>{{hero.name}}</span>
+
+service:
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Hero } from "./hero.type";
+
+@Injectable({
+    providedIn: 'root'
+})
+export class HeroesService {
+    apiUrl = 'http://localhost:3000/heroes'
+    constructor(private http: HttpClient) { }
+
+    findAll(){
+        return this.http.get<Hero[]>(this.apiUrl)
+    }
+}
+type:
+
+export interface Hero {
+    id: number
+    name: string
+}
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HeroesComponent } from './heroes.component';
+import { HttpClientModule } from '@angular/common/http';
+import { HeroesdetailsComponent } from './heroesdetails.component';
+import { HeroeComponent } from './heroe.component'
+
+@NgModule({
+  declarations: [
+    HeroesComponent,
+    HeroesdetailsComponent,
+    HeroeComponent
+  ],
+  imports: [
+    CommonModule, HttpClientModule
+  ],
+  exports: [HeroesComponent,HeroesdetailsComponent,HeroeComponent]
+})
+export class HeroesModule { }
+
+setup mock server:
+
+npm install json-server -g
+
+db.json
+{
+    "posts": [
+        {
+            "id": "1",
+            "title": "a title",
+            "views": 100
+        },
+        {
+            "id": "2",
+            "title": "another title",
+            "views": 200
+        }
+    ],
+    "comments": [
+        {
+            "id": "1",
+            "text": "a comment about post 1",
+            "postId": "1"
+        },
+        {
+            "id": "2",
+            "text": "another comment about post 1",
+            "postId": "1"
+        }
+    ],
+    "profile": {
+        "name": "typicode"
+    },
+    "heroes": [
+        {
+            "id": "1",
+            "name": "Dr.Nice"
+        },
+        {
+            "id": "2",
+            "name": "James Bond"
+        },
+        {
+            "id": "3",
+            "name": "Rubber Man"
+        },
+        {
+            "id": "4",
+            "name": "Tornado"
+        },
+        {
+            "id": "5",
+            "name": "Spider Man"
+        }
+    ]
+}
+json-server db.json
+Endpoints:
+http://localhost:3000/posts
+http://localhost:3000/comments
+http://localhost:3000/profile
+http://localhost:3000/heroes
+
+Task:
+ create Grid component which should pass
+columns
+data
+as property
+
+eg:
+ id, name as columns
+ data = heroes
+
+product information
+ id name price qty  as columns
+ data = product
